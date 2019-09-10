@@ -1,0 +1,2 @@
+insert into user_information values (1, 'Tozuka', '$2a$10$exc.1/uNj81xqK3AdRCj/OyVRqeErJOa0iD5v3DqvJ0S6FMlDm0my');-- パスワード：pass
+insert into user_information values (2, 'Tanaka', '$2a$10$JZtpQOXNbZo5Uti3NkQ2decFigtDAzPzrTnIMTngWO6zD6mBQetae');-- パスワード：password
