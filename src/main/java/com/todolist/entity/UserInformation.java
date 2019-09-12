@@ -10,9 +10,9 @@ import org.seasar.doma.jdbc.entity.NamingType;
 @Table(name = "member_secure")
 public class UserInformation {
 
-    @Id Integer userId;
-    String userName;
-    String userPassword;
+    @Id private Integer userId;
+    private String userName;
+    private String userPassword;
 
     public Integer getUserId() {
         return userId;

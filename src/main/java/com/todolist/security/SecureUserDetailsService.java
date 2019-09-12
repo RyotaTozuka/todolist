@@ -3,6 +3,7 @@ package com.todolist.security;
 import com.todolist.dao.UserInformationDao;
 import com.todolist.entity.UserInformation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,5 +24,11 @@ public class SecureUserDetailsService implements UserDetailsService {
         }
 
         return new SecureUserDetails(userInformation);
+    }
+
+    public UserInformation getUserInformation() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        return userInformationDao.selectByUserName(username);
     }
 }
