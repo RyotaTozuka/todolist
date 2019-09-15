@@ -20,9 +20,11 @@ public interface TodoListDao {
     @Select
     List<TodoListDto> selectCompleteListByUserId(Integer userId);
 
+    @Select TodoListDto selectTodoListByListId(Integer listId);
+
     @Insert(sqlFile = true)
     int insertTodoList(TodoList todoList);
 
-    @Update(sqlFile = true)
-    int updateToCompleteByListId(TodoList todoList);
+    @Update
+    int update(TodoList todoList);
 }

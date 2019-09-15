@@ -10,9 +10,13 @@
 <body>
 <div th:replace="header/header.html"></div>
 <div class="main">
-    <div>
+    <div th:if="${editFlag}">
         <h1 align="center">編集画面</h1>
     </div>
+    <div th:unless="${editFlag}">
+        <h1 align="center">新規登録画面</h1>
+    </div>
+
     <div>
         <form action="editTodoList" method="get">
             <table align="center" border="1">
@@ -23,9 +27,16 @@
                     <th></th>
                 </tr>
                 <tr>
-                    <td><input type="text" name="contents" value="〇〇を買う"></td>
-                    <td><input type="date" name="limit" value="2019-01-11"></td>
-                    <td><input type="submit" name="insert" value="編集"></td>
+                    <td><input type="text" name="contents" th:value="${todoList.listContents}"></td>
+                    <td><input type="date" name="limit" th:value="${todoList.listLimit}"></td>
+                    <td>
+                        <div th:if="${editFlag}">
+                            <button type="submit" name="updateId" th:value="${todoList.listId}">編集</button>
+                        </div>
+                        <div th:unless="${editFlag}">
+                            <button type="submit" name="insert">新規登録</button>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>

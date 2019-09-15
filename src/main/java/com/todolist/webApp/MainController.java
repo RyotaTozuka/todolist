@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -47,11 +48,17 @@ public class MainController {
     }
 
     @RequestMapping("/main/editing")
-    String mainEditing(@RequestParam() Integer editId, Model model) {
+    String mainEditing(@RequestParam() Integer editFlag, @RequestParam(defaultValue = "0") Integer listId, Model model) {
+        TodoListForm todoListForm = new TodoListForm();
 
-        if (editId.equals(NEW_CREATION)) {
-            model.addAttribute("editId",0);
+        if (editFlag.equals(NEW_CREATION)) {
+            model.addAttribute("editFlag",NEW_CREATION);
+        } else if (editFlag.equals(EDIT)) {
+            todoListForm = todoListService.getTodoListByListId(listId);
+            model.addAttribute("editFlag", EDIT);
         }
+        model.addAttribute("todoList", todoListForm);
+
         return "/main/editing";
     }
 
@@ -69,10 +76,36 @@ public class MainController {
     }
 
     @RequestMapping(value="/main/editTodoList", params="completeId")
-    String completeTodoList(@RequestParam() Integer completeId,  Model model) {
+    String completeTodoList(@RequestParam() Integer completeId) {
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        todoListService.updateToCompleteByListId(completeId, userId);
+
+        return "redirect:/main/processing";
+    }
+
+    @RequestMapping(value="/main/editTodoList", params="editId")
+    String editTodoList(@RequestParam() Integer editId,  RedirectAttributes redirectAttribute) {
+        redirectAttribute.addAttribute("editFlag", EDIT);
+        redirectAttribute.addAttribute("listId", editId);
+
+        return "redirect:/main/editing";
+    }
+
+    @RequestMapping(value = "/main/editTodoList", params = "updateId")
+    String editTodoList(
+            @RequestParam() Integer updateId,
+            @RequestParam() String contents,
+            @RequestParam() String limit,
+            Model model) {
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         TodoList todoList = new TodoList();
 
-        todoListService.updateToCompleteByListId(completeId);
+        todoList.setListId(updateId);
+        todoList.setUserId(userId);
+        todoList.setListContents(contents);
+        todoList.setListLimit(limit);
+
+        todoListService.updateTodoList(todoList);
 
         return "redirect:/main/processing";
     }

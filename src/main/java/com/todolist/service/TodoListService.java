@@ -40,14 +40,33 @@ public class TodoListService {
         return todoListForms;
     }
 
+    public TodoListForm getTodoListByListId(Integer listId) {
+        TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
+        TodoListForm todoListForm = new TodoListForm();
+        BeanUtils.copyProperties(todoListDto,todoListForm);
+
+        return todoListForm;
+    }
+
     public int insertTodoList(TodoList todoList) {
         return todoListDao.insertTodoList(todoList);
     }
 
-    public int updateToCompleteByListId(Integer listId) {
+    public int updateToCompleteByListId(Integer listId, Integer userId) {
         TodoList todoList = new TodoList();
-        todoList.setListId(listId);
+        TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
+        BeanUtils.copyProperties(todoListDto, todoList);
 
-        return todoListDao.updateToCompleteByListId(todoList);
+        todoList.setListId(listId);
+        todoList.setUserId(userId);
+        todoList.setListCompleteFlag(true);
+
+        return todoListDao.update(todoList);
+    }
+
+    public int updateTodoList(TodoList todoList) {
+        todoList.setListCompleteFlag(false);
+
+        return todoListDao.update(todoList);
     }
 }
