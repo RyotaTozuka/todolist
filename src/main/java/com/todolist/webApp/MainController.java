@@ -1,6 +1,5 @@
 package com.todolist.webApp;
 
-import com.todolist.entity.TodoList;
 import com.todolist.entity.UserInformation;
 import com.todolist.form.TodoListForm;
 import com.todolist.security.SecureUserDetailsService;
@@ -29,9 +28,16 @@ public class MainController {
     @RequestMapping("/main/processing")
     String mainProcessing(Model model) {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
-        List<TodoListForm> todoListForms= todoListService.getListByUserId(userInformation.getUserId());
+        List<TodoListForm> todoListForms= todoListService.getTodoListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
-        model.addAttribute("test","test");
         return "/main/processing";
+    }
+
+    @RequestMapping("/main/complete")
+    String mainComplete(Model model) {
+        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        List<TodoListForm> todoListForms= todoListService.getCompleteListByUserId(userInformation.getUserId());
+        model.addAttribute("todoLists", todoListForms);
+        return "/main/complete";
     }
 }

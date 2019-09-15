@@ -13,4 +13,7 @@ public interface TodoListDao {
 
     @Select
     List<TodoListDto> selectProcessingListByUserId(Integer userId);
+
+    @Select
+    List<TodoListDto> selectCompleteListByUserId(Integer userId);
 }

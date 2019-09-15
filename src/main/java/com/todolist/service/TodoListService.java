@@ -15,9 +15,21 @@ public class TodoListService {
     @Autowired
     private TodoListDao todoListDao;
 
-    public List<TodoListForm> getListByUserId(Integer userId) {
+    public List<TodoListForm> getTodoListByUserId(Integer userId) {
         List<TodoListForm> todoListForms = new ArrayList<TodoListForm>();
         List<TodoListDto> todoListDtos = todoListDao.selectProcessingListByUserId(userId);
+
+        for (TodoListDto todoListDto : todoListDtos) {
+            TodoListForm todoListForm = new TodoListForm();
+            BeanUtils.copyProperties(todoListDto, todoListForm);
+            todoListForms.add(todoListForm);
+        }
+        return todoListForms;
+    }
+
+    public List<TodoListForm> getCompleteListByUserId(Integer userId) {
+        List<TodoListForm> todoListForms = new ArrayList<TodoListForm>();
+        List<TodoListDto> todoListDtos = todoListDao.selectCompleteListByUserId(userId);
 
         for (TodoListDto todoListDto : todoListDtos) {
             TodoListForm todoListForm = new TodoListForm();
