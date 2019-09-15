@@ -21,7 +21,7 @@
     </form>
 
     <div>
-        <form action="sample.jp" method="post">
+        <form action="editTodoList" method="get">
             <table align="center" border="1">
                 <tbody>
                 <tr align="left">
@@ -34,9 +34,9 @@
                 <tr th:each="todoList:${todoLists}">
                     <td th:text="${todoList.listContents}"></td>
                     <td th:text="${todoList.listLimit}"></td>
-                    <td><input type="button" id="1" value="完了"></td>
-                    <td><input type="button" id="2" value="変更"></td>
-                    <td><input type="button" id="3" value="削除"></td>
+                    <td><button type="submit" name="completeId" th:value="${todoList.listId}">完了</button></td>
+                    <td><button type="submit" name="editId" th:value="${todoList.listId}">編集</button></td>
+                    <td><button type="submit" name="deleteId" th:value="${todoList.listId}">削除</button></td>
                 </tr>
                 </tbody>
             </table>

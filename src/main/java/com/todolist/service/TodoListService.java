@@ -43,4 +43,11 @@ public class TodoListService {
     public int insertTodoList(TodoList todoList) {
         return todoListDao.insertTodoList(todoList);
     }
+
+    public int updateToCompleteByListId(Integer listId) {
+        TodoList todoList = new TodoList();
+        todoList.setListId(listId);
+
+        return todoListDao.updateToCompleteByListId(todoList);
+    }
 }

@@ -47,7 +47,7 @@ public class MainController {
     }
 
     @RequestMapping("/main/editing")
-    String mainEditing(@RequestParam() Integer editId,Model model) {
+    String mainEditing(@RequestParam() Integer editId, Model model) {
 
         if (editId.equals(NEW_CREATION)) {
             model.addAttribute("editId",0);
@@ -55,7 +55,7 @@ public class MainController {
         return "/main/editing";
     }
 
-    @RequestMapping("/main/insertTodoList")
+    @RequestMapping(value="/main/editTodoList", params="insert")
     String insertTodoList(@RequestParam() String contents, @RequestParam() String limit, Model model) {
         TodoList todoList = new TodoList();
 
@@ -64,6 +64,15 @@ public class MainController {
         todoList.setListLimit(limit);
 
         todoListService.insertTodoList(todoList);
+
+        return "redirect:/main/processing";
+    }
+
+    @RequestMapping(value="/main/editTodoList", params="completeId")
+    String completeTodoList(@RequestParam() Integer completeId,  Model model) {
+        TodoList todoList = new TodoList();
+
+        todoListService.updateToCompleteByListId(completeId);
 
         return "redirect:/main/processing";
     }

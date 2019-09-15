@@ -5,6 +5,7 @@ import com.todolist.entity.TodoList;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
+import org.seasar.doma.Update;
 import org.seasar.doma.boot.ConfigAutowireable;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface TodoListDao {
 
     @Insert(sqlFile = true)
     int insertTodoList(TodoList todoList);
+
+    @Update(sqlFile = true)
+    int updateToCompleteByListId(TodoList todoList);
 }
