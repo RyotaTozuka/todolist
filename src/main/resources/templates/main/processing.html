@@ -1,10 +1,13 @@
 <!DOCTYPE HTML>
 
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>ログイン画面</title>
     <meta http-equiv="Content-Type" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"  th:href="@{/css/style.css}"/>
 </head>
+<div th:replace="header/header.html" ></div>
 <body>
 <div>
     <h1 align="center">リスト一覧</h1>
@@ -39,7 +42,7 @@
     </form>
 </div>
 <div align="center">
-    <a href="sample3.jp">完了したものを表示</a>
+    <a href="complete">完了したものを表示</a>
 </div>
 </body>
 </html>
