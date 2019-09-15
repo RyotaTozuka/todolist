@@ -4,40 +4,44 @@
 <head>
     <title>ログイン画面</title>
     <meta http-equiv="Content-Type" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div>
-    <h1 align="center">リスト一覧（完了しているもの）</h1>
-</div>
+<div th:replace="header/header.html"></div>
+<div class="main">
+    <div>
+        <h1 align="center">リスト一覧（完了しているもの）</h1>
+    </div>
 
-<div>
-    <form action="sample.jp" method="post">
-        <table align="center" border="1">
-            <tbody>
-            <tr align="left">
-                <th>内容</th>
-                <th>期限</th>
-                <th></th>
-                <th></th>
-            </tr>
-            <tr th:each="todoList:${todoLists}">
-                <td th:text="${todoList.listContents}"></td>
-                <td th:text="${todoList.listLimit}"></td>
-                <td><input type="button" id="1" value="未完了にする"></td>
-                <td><input type="button" id="3" value="削除"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><input type="button" id = "4" value="すべて削除"></td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
-<div align="center">
-    <a href="processing">Todoリストに戻る</a>
+    <div>
+        <form action="sample.jp" method="post">
+            <table align="center" border="1">
+                <tbody>
+                <tr align="left">
+                    <th>内容</th>
+                    <th>期限</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="todoList:${todoLists}">
+                    <td th:text="${todoList.listContents}"></td>
+                    <td th:text="${todoList.listLimit}"></td>
+                    <td><input type="button" id="1" value="未完了にする"></td>
+                    <td><input type="button" id="3" value="削除"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="button" id="4" value="すべて削除"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div align="center">
+        <a href="processing">Todoリストに戻る</a>
+    </div>
 </div>
 </body>
 </html>

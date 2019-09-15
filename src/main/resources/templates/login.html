@@ -2,22 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>ログイン画面</title>
-    <meta http-equiv="Content-Type" charset="UTF-8" />
+    <meta http-equiv="Content-Type" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" th:href="@{/css/style.css}"/>
 </head>
 <body>
+<div th:replace="header/header.html"></div>
+<div class="main">
     <div>
         <p>
-            <h1 id="title">ログイン</h1>
+        <h1 id="title">ログイン</h1>
         </p>
     </div>
     <div>
         <form method="post" th:action="@{'/login'}">
-                <label>ユーザ名</label><br>
-                <input type="text" id="username" name="username" placeholder="ユーザ名" autofocus required /><br>
-                <label>パスワード</label><br>
-                <input type="password" id="password" name="password" placeholder="パスワード" required /><br>
-                <input type="submit" value="ログイン" />
+            <label>ユーザ名</label><br>
+            <input type="text" id="username" name="username" placeholder="ユーザ名" autofocus required/><br>
+            <label>パスワード</label><br>
+            <input type="password" id="password" name="password" placeholder="パスワード" required/><br>
+            <input type="submit" value="ログイン"/>
         </form>
     </div>
+</div>
 </body>
 </html>

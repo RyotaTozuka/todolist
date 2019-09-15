@@ -5,44 +5,46 @@
 <head>
     <title>ログイン画面</title>
     <meta http-equiv="Content-Type" charset="UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="/css/style.css"  th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" th:href="@{/css/style.css}"/>
 </head>
-<div th:replace="header/header.html" ></div>
 <body>
-<div>
-    <h1 align="center">リスト一覧</h1>
-</div>
-
-<form action="sample.jp" method="get">
-    <div align="center">
-        <input type="button" id="0" value="新規登録">
+<div th:replace="header/header.html"></div>
+<div class="main">
+    <div>
+        <h1 align="center">リスト一覧</h1>
     </div>
-</form>
 
-<div>
-    <form action="sample.jp" method="post">
-        <table align="center" border="1">
-            <tbody>
-            <tr align="left">
-                <th>内容</th>
-                <th>期限</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            <tr th:each="todoList:${todoLists}">
-                <td th:text="${todoList.listContents}"></td>
-                <td th:text="${todoList.listLimit}"></td>
-                <td><input type="button" id="1" value="完了"></td>
-                <td><input type="button" id="2" value="変更"></td>
-                <td><input type="button" id="3" value="削除"></td>
-            </tr>
-            </tbody>
-        </table>
+    <form action="sample.jp" method="get">
+        <div align="center">
+            <input type="button" id="0" value="新規登録">
+        </div>
     </form>
-</div>
-<div align="center">
-    <a href="complete">完了したものを表示</a>
+
+    <div>
+        <form action="sample.jp" method="post">
+            <table align="center" border="1">
+                <tbody>
+                <tr align="left">
+                    <th>内容</th>
+                    <th>期限</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="todoList:${todoLists}">
+                    <td th:text="${todoList.listContents}"></td>
+                    <td th:text="${todoList.listLimit}"></td>
+                    <td><input type="button" id="1" value="完了"></td>
+                    <td><input type="button" id="2" value="変更"></td>
+                    <td><input type="button" id="3" value="削除"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div align="center">
+        <a href="complete">完了したものを表示</a>
+    </div>
 </div>
 </body>
 </html>
