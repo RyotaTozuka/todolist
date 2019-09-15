@@ -1,16 +1,15 @@
 package com.todolist.entity;
 
-import org.seasar.doma.Entity;
-import org.seasar.doma.Id;
-import org.seasar.doma.Table;
-import org.seasar.doma.jdbc.entity.NamingType;
+import org.seasar.doma.*;
 
-@Entity(naming = NamingType.SNAKE_LOWER_CASE)
+@Entity
 @Table(name = "todo_list")
 public class TodoList {
 
-    @Id private Integer listId;
-    private String userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer listId;
+    private Integer userId;
     private String listContents;
     private String listLimit;
     private boolean listCompleteFlag;
@@ -23,11 +22,11 @@ public class TodoList {
         this.listId = listId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

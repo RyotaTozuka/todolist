@@ -1,5 +1,6 @@
 package com.todolist.webApp;
 
+import com.todolist.entity.TodoList;
 import com.todolist.entity.UserInformation;
 import com.todolist.form.TodoListForm;
 import com.todolist.security.SecureUserDetailsService;
@@ -9,11 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
 public class MainController {
+    private static final Integer NEW_CREATION = 0;
+    private static final Integer EDIT = 1;
+
     @Autowired
     private TodoListService todoListService;
 
@@ -39,5 +44,27 @@ public class MainController {
         List<TodoListForm> todoListForms= todoListService.getCompleteListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
         return "/main/complete";
+    }
+
+    @RequestMapping("/main/editing")
+    String mainEditing(@RequestParam() Integer editId,Model model) {
+
+        if (editId.equals(NEW_CREATION)) {
+            model.addAttribute("editId",0);
+        }
+        return "/main/editing";
+    }
+
+    @RequestMapping("/main/insertTodoList")
+    String insertTodoList(@RequestParam() String contents, @RequestParam() String limit, Model model) {
+        TodoList todoList = new TodoList();
+
+        todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
+        todoList.setListContents(contents);
+        todoList.setListLimit(limit);
+
+        todoListService.insertTodoList(todoList);
+
+        return "redirect:/main/processing";
     }
 }

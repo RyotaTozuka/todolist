@@ -1,7 +1,9 @@
 package com.todolist.dao;
 
 import com.todolist.dto.TodoListDto;
+import com.todolist.entity.TodoList;
 import org.seasar.doma.Dao;
+import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.boot.ConfigAutowireable;
 
@@ -16,4 +18,7 @@ public interface TodoListDao {
 
     @Select
     List<TodoListDto> selectCompleteListByUserId(Integer userId);
+
+    @Insert(sqlFile = true)
+    int insertTodoList(TodoList todoList);
 }

@@ -2,6 +2,7 @@ package com.todolist.service;
 
 import com.todolist.dao.TodoListDao;
 import com.todolist.dto.TodoListDto;
+import com.todolist.entity.TodoList;
 import com.todolist.form.TodoListForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,9 @@ public class TodoListService {
             todoListForms.add(todoListForm);
         }
         return todoListForms;
+    }
+
+    public int insertTodoList(TodoList todoList) {
+        return todoListDao.insertTodoList(todoList);
     }
 }

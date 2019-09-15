@@ -14,7 +14,7 @@
         <h1 align="center">編集画面</h1>
     </div>
     <div>
-        <form action="processing" method="get">
+        <form action="insertTodoList" method="get">
             <table align="center" border="1">
                 <tbody>
                 <tr align="left">
@@ -23,8 +23,8 @@
                     <th></th>
                 </tr>
                 <tr>
-                    <td><input type="text" id="contents" value="〇〇を買う"></td>
-                    <td><input type="date" id="limit" value="2019-01-11"></td>
+                    <td><input type="text" name="contents" value="〇〇を買う"></td>
+                    <td><input type="date" name="limit" value="2019-01-11"></td>
                     <td><input type="submit" value="編集"></td>
                 </tr>
                 </tbody>
