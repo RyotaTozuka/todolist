@@ -60,6 +60,13 @@ public class UserInformationService {
         return userInformationDao.insertUserInformation(userInformation);
     }
 
+    public int deleteUserByUserId(Integer userId) {
+        UserInformation userInformation = new UserInformation();
+        userInformation.setUserId(userId);
+
+        return userInformationDao.delete(userInformation);
+    }
+
     private String encodePassword(String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);

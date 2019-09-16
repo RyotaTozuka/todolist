@@ -30,4 +30,7 @@ public interface TodoListDao {
 
     @Delete(sqlFile = true)
     int deleteAllCompleteListByUserId(TodoList todoList);
+
+    @Delete(sqlFile = true)
+    int deleteListByUserId(TodoList todoList);
 }

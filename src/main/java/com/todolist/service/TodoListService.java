@@ -95,4 +95,11 @@ public class TodoListService {
 
         return todoListDao.deleteAllCompleteListByUserId(todoList);
     }
+
+    public int deleteListByUserId(Integer userId) {
+        TodoList todoList = new TodoList();
+        todoList.setUserId(userId);
+
+        return todoListDao.deleteListByUserId(todoList);
+    }
 }
