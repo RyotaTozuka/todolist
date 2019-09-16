@@ -1,5 +1,6 @@
 package com.todolist.webApp;
 
+import com.todolist.entity.UserInformation;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,31 @@ public class UserController {
     public String createUser(Model model) {
         controllerProcedure.addMastAttribute(model);
         return "/user/createUser";
+    }
+
+    @RequestMapping(value="/user/insertUser", method=RequestMethod.POST)
+    public String insertUser(
+            @RequestParam() String userName,
+            @RequestParam() String passwordFirst,
+            @RequestParam() String passwordSecond,
+            @RequestParam(defaultValue = "ROLE_USER") String newUsersRole) {
+
+        if (!passwordFirst.matches(passwordSecond)) {
+            return "user/createUser";
+        }
+
+        UserInformation userInformation = new UserInformation();
+        userInformation.setUserName(userName);
+        userInformation.setUserPassword(passwordFirst);
+
+        if (("ROLE_ADMIN").matches(newUsersRole)) {
+            userInformation.setUserRole("ROLE_ADMIN");
+        } else {
+            userInformation.setUserRole("ROLE_USER");
+        }
+
+        userInformationService.insertUserInformation(userInformation);
+
+        return "redirect:/login";
     }
 }

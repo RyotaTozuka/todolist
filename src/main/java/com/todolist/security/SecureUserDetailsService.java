@@ -47,9 +47,4 @@ public class SecureUserDetailsService implements UserDetailsService {
 
         return passwordEncoder.matches(password, userInformation.getUserPassword());
     }
-
-    public String encodePassword(String password) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
 }
