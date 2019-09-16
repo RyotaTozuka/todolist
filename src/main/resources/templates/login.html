@@ -10,15 +10,15 @@
 <div class="main">
     <div>
         <p>
-        <h1 id="title">ログイン</h1>
+        <h1 align="center" id="title">ToDoリストアプリ</h1>
         </p>
     </div>
-    <div>
+    <div align="center">
         <form method="post" th:action="@{/login}">
-            <label>ユーザ名</label><br>
-            <input type="text" id="username" name="username" placeholder="ユーザ名" autofocus required/><br>
-            <label>パスワード</label><br>
-            <input type="password" id="password" name="password" placeholder="パスワード" required/><br>
+            <label>username</label><br>
+            <input type="text" id="username" name="username" placeholder="username" autofocus required/><br>
+            <label>password</label><br>
+            <input type="password" id="password" name="password" placeholder="password" required/><br>
             <input type="submit" value="ログイン"/>
         </form>
     </div>
