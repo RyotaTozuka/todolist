@@ -5,6 +5,8 @@ import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
 import org.seasar.doma.Table;
 
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "member_secure")
 public class UserInformation {
@@ -12,6 +14,8 @@ public class UserInformation {
     @Id private Integer userId;
     private String userName;
     private String userPassword;
+    @NotNull
+    private String userRole;
 
     public Integer getUserId() {
         return userId;
@@ -35,5 +39,13 @@ public class UserInformation {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }

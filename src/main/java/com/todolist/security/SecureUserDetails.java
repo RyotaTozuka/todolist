@@ -12,6 +12,6 @@ public class SecureUserDetails extends User {
         super(
                 userInformation.getUserName(),
                 userInformation.getUserPassword(),
-                AuthorityUtils.createAuthorityList("USER_ADMIN"));
+                AuthorityUtils.createAuthorityList(userInformation.getUserRole()));
     }
 }
