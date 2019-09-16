@@ -1,0 +1,37 @@
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>ログイン画面</title>
+    <meta http-equiv="Content-Type" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="header/header.html"></div>
+<div class="main" align="center">
+    <div>
+        <h1>管理者メニュー</h1>
+    </div>
+    <form action="editUserList" method="get">
+        <input type="hidden" name="status" value="complete">
+        <table align="center" border="1">
+            <tbody>
+            <tr align="left">
+                <th>ユーザ名</th>
+                <th>管理者権限</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr th:each="userList:${userLists}">
+                <td th:text="${userList.userName}"></td>
+                <td th:text="${userList.userRole}"></td>
+                <td><button type="submit" name="changeRoleId" th:value="${userList.userId}">権限の変更</button></td>
+                <td><button type="submit" name="deleteId" th:value="${userList.userId}">削除</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>
