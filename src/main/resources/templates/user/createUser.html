@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" th:href="@{/css/style.css}"/>
+</head>
+<div th:replace="header/header.html"></div>
+<body>
+<div class="main">
+    <div>
+        <p>
+        <h1 align="center" id="title">ユーザ登録</h1>
+        </p>
+    </div>
+    <div align="center">
+        <form method="post" th:action="@{/user/insertUser}">
+            <label>username</label><br>
+            <input type="text" name="userName" placeholder="username" autofocus required/><br>
+            <label>password</label><br>
+            <input type="password" name="passwordFirst" placeholder="password" required/><br>
+            <input type="password" name="passwordSecond" placeholder="password (again)" required/><br><br>
+            <div th:if="${userRole}">
+                <input type="checkbox" name="newUsersRole">管理者権限
+            </div><br>
+            <input type="submit" value="ユーザ作成"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

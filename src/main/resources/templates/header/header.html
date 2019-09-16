@@ -2,9 +2,23 @@
 
 <header>
     <div align="right">
-        <span class="mgr-20" style="color:#ffffff" th:text="${userName != null} ? ${userName} + のTodoリスト : ようこそ"></span>
-        <span class="mgr-20">
-            <a class="white" th:href="@{/logout}">ログアウト</a>
-        </span>
+        <div th:if="${userName != null}">
+            <span class="mgr-20">
+                <a class="white" th:href="@{/main/processing}"><span th:text="${userName} + のTodoリスト" /></a>
+            </span>
+            <span class="mgr-20">
+                <a class="white" th:href="@{/logout}">ログアウト</a>
+            </span>
+            <br/>
+            <span class="mgr-20" th:if="${userRole}">
+                <a class="white" th:href="@{xxx}">管理者画面</a>
+            </span>
+            <span class="mgr-20">
+                <a class="white" th:href="@{/user/changePassword}">パスワード変更</a>
+            </span>
+        </div>
+        <div class="mgr-20" th:unless="${userName != null}">
+            <div class="white" th:text="ようこそ" />
+        </div>
     </div>
 </header>

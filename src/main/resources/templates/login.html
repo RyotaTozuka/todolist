@@ -7,20 +7,23 @@
 </head>
 <body>
 <div th:replace="header/header.html"></div>
-<div class="main">
+<div class="main" align="center">
     <div>
         <p>
-        <h1 align="center" id="title">ToDoリストアプリ</h1>
+        <h1 id="title">ToDoリストアプリ</h1>
         </p>
     </div>
-    <div align="center">
+    <div>
         <form method="post" th:action="@{/login}">
             <label>username</label><br>
-            <input type="text" id="username" name="username" placeholder="username" autofocus required/><br>
+            <input type="text" name="username" placeholder="username" autofocus required/><br>
             <label>password</label><br>
-            <input type="password" id="password" name="password" placeholder="password" required/><br>
+            <input type="password" name="password" placeholder="password" required/><br><br>
             <input type="submit" value="ログイン"/>
         </form>
+    </div><br>
+    <div>
+        <span>ユーザ登録は</span><a href="/user/createUser">こちら</a>
     </div>
 </div>
 </body>

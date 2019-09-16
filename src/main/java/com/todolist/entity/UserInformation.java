@@ -8,7 +8,7 @@ import org.seasar.doma.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "member_secure")
+@Table(name = "user_information")
 public class UserInformation {
 
     @Id private Integer userId;

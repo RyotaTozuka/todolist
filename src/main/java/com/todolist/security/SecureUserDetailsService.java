@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +30,26 @@ public class SecureUserDetailsService implements UserDetailsService {
 
     public UserInformation getUserInformation() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        return userInformationDao.selectByUserName(username);
+
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            return userInformationDao.selectByUserName(username);
+        } else {
+            UserInformation userInformation = new UserInformation();
+            userInformation.setUserRole("ROLE_USER");
+            return userInformation;
+        }
+    }
+
+    public boolean checkPasswordValidation(String password) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserInformation userInformation = getUserInformation();
+
+        return passwordEncoder.matches(password, userInformation.getUserPassword());
+    }
+
+    public String encodePassword(String password) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 }

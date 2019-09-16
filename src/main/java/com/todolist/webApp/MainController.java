@@ -26,6 +26,9 @@ public class MainController {
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
 
+    @Autowired
+    private ControllerProcedure controllerProcedure;
+
     @ModelAttribute
     TodoListForm setUpForm() {
         return new TodoListForm();
@@ -33,7 +36,7 @@ public class MainController {
 
     @RequestMapping("/main/processing")
     String mainProcessing(Model model) {
-        addUserName(model);
+        controllerProcedure.addMastAttribute(model);
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
@@ -42,7 +45,7 @@ public class MainController {
 
     @RequestMapping("/main/complete")
     String mainComplete(Model model) {
-        addUserName(model);
+        controllerProcedure.addMastAttribute(model);
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
         List<TodoListForm> todoListForms = todoListService.getCompleteListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
@@ -51,7 +54,7 @@ public class MainController {
 
     @RequestMapping("/main/editing")
     String mainEditing(@RequestParam() Integer editFlag, @RequestParam(defaultValue = "0") Integer listId, Model model) {
-        addUserName(model);
+        controllerProcedure.addMastAttribute(model);
 
         TodoListForm todoListForm = new TodoListForm();
 
@@ -68,7 +71,7 @@ public class MainController {
 
     @RequestMapping(value = "/main/editTodoList", params = "insert")
     String insertTodoList(@RequestParam() String contents, @RequestParam() String limit, Model model) {
-        addUserName(model);
+        controllerProcedure.addMastAttribute(model);
         TodoList todoList = new TodoList();
 
         todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
@@ -140,11 +143,5 @@ public class MainController {
         todoListService.deleteAllCompleteListByUserId(userId);
 
         return "redirect:/main/processing";
-    }
-
-    private Model addUserName(Model model) {
-        String userName = secureUserDetailsService.getUserInformation().getUserName();
-        model.addAttribute("userName", userName);
-        return model;
     }
 }
