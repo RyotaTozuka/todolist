@@ -7,6 +7,15 @@ import org.seasar.doma.boot.ConfigAutowireable;
 
 import java.util.List;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * DB: user_information とやり取りするdaoクラス
+ * FWとしてdomaを使用
+ * selectすべて及び、update,insert,deleteのうち sqlFile=trueのものは
+ * target classの META-INF/com/todolist/dao/UserInformationDao 配下にsqlファイルがある
+ */
 @ConfigAutowireable
 @Dao
 public interface UserInformationDao {

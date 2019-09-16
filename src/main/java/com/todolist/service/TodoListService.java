@@ -11,13 +11,26 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * TodoList の情報を扱うServiceクラス
+ */
 @Service
 public class TodoListService {
+
     @Autowired
     private TodoListDao todoListDao;
 
+    /**
+     * userId情報に基づくTodoListを全件抽出する。
+     *
+     * @param userId ユーザID
+     * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
+     */
     public List<TodoListForm> getTodoListByUserId(Integer userId) {
-        List<TodoListForm> todoListForms = new ArrayList<TodoListForm>();
+        List<TodoListForm> todoListForms = new ArrayList<>();
         List<TodoListDto> todoListDtos = todoListDao.selectProcessingListByUserId(userId);
 
         for (TodoListDto todoListDto : todoListDtos) {
@@ -28,8 +41,15 @@ public class TodoListService {
         return todoListForms;
     }
 
+    /**
+     * userId情報に基づくTodoListのうち、ステータス：完了のものを全件抽出する。
+     * (ListCompleteFlag = true: 完了、 false: 未完了)
+     *
+     * @param userId ユーザID
+     * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
+     */
     public List<TodoListForm> getCompleteListByUserId(Integer userId) {
-        List<TodoListForm> todoListForms = new ArrayList<TodoListForm>();
+        List<TodoListForm> todoListForms = new ArrayList<>();
         List<TodoListDto> todoListDtos = todoListDao.selectCompleteListByUserId(userId);
 
         for (TodoListDto todoListDto : todoListDtos) {
@@ -40,6 +60,12 @@ public class TodoListService {
         return todoListForms;
     }
 
+    /**
+     * 主キー:listId に紐づくTodoListを抽出する
+     *
+     * @param listId リストId
+     * @return todoListForm の型で抽出
+     */
     public TodoListForm getTodoListByListId(Integer listId) {
         TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
         TodoListForm todoListForm = new TodoListForm();
@@ -48,40 +74,67 @@ public class TodoListService {
         return todoListForm;
     }
 
+    /**
+     * 入力されたTodoListの挿入
+     *
+     * @param todoList Todoリスト
+     * @return 挿入成功件数
+     */
     public int insertTodoList(TodoList todoList) {
         return todoListDao.insertTodoList(todoList);
     }
 
-    public int updateToCompleteByListId(Integer listId, Integer userId) {
-        TodoList todoList = new TodoList();
-        TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
-        BeanUtils.copyProperties(todoListDto, todoList);
-
-        todoList.setListId(listId);
-        todoList.setUserId(userId);
+    /**
+     * 入力されたlistIdに紐づくレコードの
+     * ステータス（ListCompleteFlag）を未完了（false）から完了（true）にする
+     *
+     * @param listId リストId
+     * @return 更新完了件数（1ならば正常、0ならば異常）
+     */
+    public int updateToCompleteByListId(Integer listId) {
+        TodoList todoList = todoListDao.selectByListId(listId);
         todoList.setListCompleteFlag(true);
 
         return todoListDao.update(todoList);
     }
 
-    public int updateToProcessingByListId(Integer listId, Integer userId) {
-        TodoList todoList = new TodoList();
-        TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
-        BeanUtils.copyProperties(todoListDto, todoList);
-
-        todoList.setListId(listId);
-        todoList.setUserId(userId);
+    /**
+     * 入力されたlistIdに紐づくレコードの
+     * ステータス（ListCompleteFlag）を完了（true）から未完了（false）にする
+     *
+     * @param listId リストId
+     * @return 更新完了件数（1ならば正常、0ならば異常）
+     */
+    public int updateToProcessingByListId(Integer listId) {
+        TodoList todoList = todoListDao.selectByListId(listId);
         todoList.setListCompleteFlag(false);
 
         return todoListDao.update(todoList);
     }
 
-    public int updateTodoList(TodoList todoList) {
-        todoList.setListCompleteFlag(false);
+
+    /**
+     * 入力された情報をもとにTodoListのレコード更新をする
+     *
+     * @param listId リストId
+     * @param contents リストの内容
+     * @param limit リストの実施期限
+     * @return 更新完了件数（1ならば正常、0ならば異常）
+     */
+    public int updateTodoList(Integer listId, String contents, String limit) {
+        TodoList todoList = todoListDao.selectByListId(listId);
+        todoList.setListContents(contents);
+        todoList.setListLimit(limit);
 
         return todoListDao.update(todoList);
     }
 
+    /**
+     * 入力されたlistIdに紐づくレコードを削除する
+     *
+     * @param listId リストId
+     * @return 削除完了件数（1ならば正常、0ならば異常）
+     */
     public int deleteTodoList(Integer listId) {
         TodoList todoList = new TodoList();
         todoList.setListId(listId);
@@ -89,6 +142,13 @@ public class TodoListService {
        return todoListDao.delete(todoList);
     }
 
+    /**
+     * 入力されたuserIdに紐づく、ステータス：完了のレコードを全権削除
+     *  (ListCompleteFlag = true: 完了、 false: 未完了)
+     *
+     * @param userId ログイン中のユーザId
+     * @return 削除完了件数
+     */
     public int deleteAllCompleteListByUserId(Integer userId) {
         TodoList todoList = new TodoList();
         todoList.setUserId(userId);
@@ -96,6 +156,12 @@ public class TodoListService {
         return todoListDao.deleteAllCompleteListByUserId(todoList);
     }
 
+    /**
+     * 入力されたuserIdに紐づくレコードを全権削除
+     *
+     * @param userId ログイン中のユーザId
+     * @return 削除完了件数
+     */
     public int deleteListByUserId(Integer userId) {
         TodoList todoList = new TodoList();
         todoList.setUserId(userId);

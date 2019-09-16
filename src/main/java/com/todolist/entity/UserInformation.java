@@ -7,6 +7,12 @@ import org.seasar.doma.Table;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * UserInformation の Entityクラス
+ */
 @Entity
 @Table(name = "user_information")
 public class UserInformation {

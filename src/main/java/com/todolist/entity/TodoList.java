@@ -2,6 +2,12 @@ package com.todolist.entity;
 
 import org.seasar.doma.*;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * TodoList の Entityクラス
+ */
 @Entity
 @Table(name = "todo_list")
 public class TodoList {

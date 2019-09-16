@@ -3,6 +3,13 @@ package com.todolist.form;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * TodoListの Formクラス
+ * todo_list の持つ情報のうち、Viewに渡すものを抽出している。
+ */
 public class TodoListForm {
 
     @NotNull

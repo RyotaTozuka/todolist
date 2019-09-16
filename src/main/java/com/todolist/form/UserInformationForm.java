@@ -2,6 +2,13 @@ package com.todolist.form;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * UserInformation の Formクラス
+ * user_information の持つ情報のうち、Viewに渡すものを抽出している。
+ */
 public class UserInformationForm {
 
     @NotNull

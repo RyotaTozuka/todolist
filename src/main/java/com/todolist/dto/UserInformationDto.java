@@ -3,6 +3,13 @@ package com.todolist.dto;
 import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
 
+/**
+ * @author Ryota Tozuka
+ * @version 0.0.1
+ *
+ * UserInformation のDtoクラス
+ * user_information の持つ情報のうち、Viewに渡すものを抽出している。
+ */
 @Entity
 public class UserInformationDto {
 
