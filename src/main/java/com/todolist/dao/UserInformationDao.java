@@ -18,6 +18,9 @@ public interface UserInformationDao {
     UserInformation selectByUserName(String userName);
 
     @Select
+    UserInformation selectByUserId(Integer userId);
+
+    @Select
     List<UserInformationDto> selectUserAll();
 
     @Update

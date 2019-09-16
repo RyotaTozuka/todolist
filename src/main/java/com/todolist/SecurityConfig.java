@@ -22,11 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/login","/header/header","/user/createUser","/user/insertUser")
                 .permitAll()
-                .antMatchers("/admin**").hasRole("ADMIN")
+                .antMatchers("/admin/*").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin() // ログインページに飛ばすよ
+                .formLogin()
                 .loginProcessingUrl("/login")
                 .loginPage("/login")
                 .defaultSuccessUrl("/main/processing", true)

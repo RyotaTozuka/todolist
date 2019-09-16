@@ -44,6 +44,17 @@ public class UserInformationService {
         return userInformationDao.update(userInformation);
     }
 
+    public int flipUserRoleByUserId(Integer userId) {
+        UserInformation userInformation = userInformationDao.selectByUserId(userId);
+
+        if (("ROLE_USER").matches(userInformation.getUserRole())) {
+            userInformation.setUserRole("ROLE_ADMIN");
+        } else {
+            userInformation.setUserRole("ROLE_USER");
+        }
+        return userInformationDao.update(userInformation);
+    }
+
     public int insertUserInformation(UserInformation userInformation) {
         userInformation.setUserPassword(encodePassword(userInformation.getUserPassword()));
         return userInformationDao.insertUserInformation(userInformation);
