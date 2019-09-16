@@ -2,9 +2,8 @@ package com.todolist.dto;
 
 import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
-import org.seasar.doma.jdbc.entity.NamingType;
 
-@Entity(naming = NamingType.SNAKE_LOWER_CASE)
+@Entity
 public class TodoListDto {
     @Id private Integer listId;
     private String listContents;

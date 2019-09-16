@@ -78,6 +78,13 @@ public class UserController {
 
         userInformationService.insertUserInformation(userInformation);
 
+        String userRole = secureUserDetailsService.getUserInformation().getUserRole();
+
+        if (userRole != null) {
+             if (("ROLE_ADMIN").matches(userRole)) {
+                 return "redirect:/admin/main";
+             }
+        }
         return "redirect:/login";
     }
 }

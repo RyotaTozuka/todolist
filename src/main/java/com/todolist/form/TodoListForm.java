@@ -11,7 +11,7 @@ public class TodoListForm {
     @Size(max = 50)
     private String listContents;
 
-    @Size(max = 8)
+    @Size(max = 10)
     private String listLimit;
 
     public Integer getListId() {

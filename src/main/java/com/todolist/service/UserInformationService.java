@@ -1,12 +1,19 @@
 package com.todolist.service;
 
 import com.todolist.dao.UserInformationDao;
+import com.todolist.dto.UserInformationDto;
 import com.todolist.entity.UserInformation;
+import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserInformationService {
@@ -15,6 +22,19 @@ public class UserInformationService {
 
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
+
+    public List<UserInformationForm> selectUserAll() {
+        List<UserInformationForm> userInformationForms = new ArrayList<>();
+        List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
+
+        for (UserInformationDto userInformationDto : userInformationDtos) {
+            UserInformationForm userInformationForm = new UserInformationForm();
+            BeanUtils.copyProperties(userInformationDto, userInformationForm);
+            userInformationForms.add(userInformationForm);
+        }
+
+        return userInformationForms;
+    }
 
     public int updateUserPassword(String rawPassword) {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
