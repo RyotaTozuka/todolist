@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -34,7 +35,7 @@ public class MainController {
     @RequestMapping("/main/processing")
     String mainProcessing(Model model) {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
-        List<TodoListForm> todoListForms= todoListService.getTodoListByUserId(userInformation.getUserId());
+        List<TodoListForm> todoListForms = todoListService.getTodoListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
         return "/main/processing";
     }
@@ -42,7 +43,7 @@ public class MainController {
     @RequestMapping("/main/complete")
     String mainComplete(Model model) {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
-        List<TodoListForm> todoListForms= todoListService.getCompleteListByUserId(userInformation.getUserId());
+        List<TodoListForm> todoListForms = todoListService.getCompleteListByUserId(userInformation.getUserId());
         model.addAttribute("todoLists", todoListForms);
         return "/main/complete";
     }
@@ -52,7 +53,7 @@ public class MainController {
         TodoListForm todoListForm = new TodoListForm();
 
         if (editFlag.equals(NEW_CREATION)) {
-            model.addAttribute("editFlag",NEW_CREATION);
+            model.addAttribute("editFlag", NEW_CREATION);
         } else if (editFlag.equals(EDIT)) {
             todoListForm = todoListService.getTodoListByListId(listId);
             model.addAttribute("editFlag", EDIT);
@@ -62,7 +63,7 @@ public class MainController {
         return "/main/editing";
     }
 
-    @RequestMapping(value="/main/editTodoList", params="insert")
+    @RequestMapping(value = "/main/editTodoList", params = "insert")
     String insertTodoList(@RequestParam() String contents, @RequestParam() String limit, Model model) {
         TodoList todoList = new TodoList();
 
@@ -75,7 +76,7 @@ public class MainController {
         return "redirect:/main/processing";
     }
 
-    @RequestMapping(value="/main/editTodoList", params="completeId")
+    @RequestMapping(value = "/main/editTodoList", params = "completeId")
     String completeTodoList(@RequestParam() Integer completeId) {
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         todoListService.updateToCompleteByListId(completeId, userId);
@@ -83,8 +84,16 @@ public class MainController {
         return "redirect:/main/processing";
     }
 
-    @RequestMapping(value="/main/editTodoList", params="editId")
-    String editTodoList(@RequestParam() Integer editId,  RedirectAttributes redirectAttribute) {
+    @RequestMapping(value = "/main/editTodoList", params = "processingId")
+    String processingTodoList(@RequestParam() Integer processingId) {
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        todoListService.updateToProcessingByListId(processingId, userId);
+
+        return "redirect:/main/complete";
+    }
+
+    @RequestMapping(value = "/main/editTodoList", params = "editId")
+    String editTodoList(@RequestParam() Integer editId, RedirectAttributes redirectAttribute) {
         redirectAttribute.addAttribute("editFlag", EDIT);
         redirectAttribute.addAttribute("listId", editId);
 
@@ -106,6 +115,25 @@ public class MainController {
         todoList.setListLimit(limit);
 
         todoListService.updateTodoList(todoList);
+
+        return "redirect:/main/processing";
+    }
+
+    @RequestMapping(value = "/main/editTodoList", params = "deleteId")
+    String deleteTodoList(@RequestParam() Integer deleteId, @RequestParam(defaultValue = "NO_STATE") String status) {
+        todoListService.deleteTodoList(deleteId);
+
+        if (status.matches("complete")) {
+            return "redirect:/main/complete";
+        } else {
+            return "redirect:/main/processing";
+        }
+    }
+
+    @RequestMapping(value = "/main/editTodoList", params = "deleteCompleteAll")
+    String deleteAllCompleteList() {
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        todoListService.deleteAllCompleteListByUserId(userId);
 
         return "redirect:/main/processing";
     }

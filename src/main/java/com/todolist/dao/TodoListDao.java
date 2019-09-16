@@ -2,10 +2,7 @@ package com.todolist.dao;
 
 import com.todolist.dto.TodoListDto;
 import com.todolist.entity.TodoList;
-import org.seasar.doma.Dao;
-import org.seasar.doma.Insert;
-import org.seasar.doma.Select;
-import org.seasar.doma.Update;
+import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 
 import java.util.List;
@@ -27,4 +24,10 @@ public interface TodoListDao {
 
     @Update
     int update(TodoList todoList);
+
+    @Delete
+    int delete(TodoList todoList);
+
+    @Delete(sqlFile = true)
+    int deleteAllCompleteListByUserId(TodoList todoList);
 }
