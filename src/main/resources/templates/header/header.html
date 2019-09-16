@@ -2,10 +2,9 @@
 
 <header>
     <div align="right">
-        <span class="mgr-20" style="color:#ffffff">〇〇のToDoリスト</span>
+        <span class="mgr-20" style="color:#ffffff" th:text="${userName != null} ? ${userName} + のTodoリスト : ようこそ"></span>
         <span class="mgr-20">
-                <a class="white" th:href="@{/logout}">ログアウト</a>
-            </span>
-
+            <a class="white" th:href="@{/logout}">ログアウト</a>
+        </span>
     </div>
 </header>
