@@ -8,11 +8,13 @@ import com.todolist.service.TodoListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,8 +26,8 @@ import java.util.List;
 @Controller
 public class MainController {
     //mainEditingで使用
-    private static final Integer NEW_CREATION = 0;
-    private static final Integer EDIT = 1;
+    private static final boolean NEW_CREATION = false;
+    private static final boolean EDIT = true;
 
     @Autowired
     private TodoListService todoListService;
@@ -78,24 +80,24 @@ public class MainController {
     /**
      * Todoリストの編集画面に遷移する
      *
-     * @param editFlag 0:新規登録、1:既存リストの編集（更新）
+     * @param isUpdate false:新規登録、true:既存リストの編集（更新）
      * @param listId TodoリストのId
      * @param model モデル
      * @return Todoリスト編集画面のアドレス
      */
     @RequestMapping("/main/editing")
-    String mainEditing(@RequestParam() Integer editFlag, @RequestParam(defaultValue = "0") Integer listId, Model model) {
+    String mainEditing(@RequestParam() boolean isUpdate, @RequestParam(defaultValue = "0") Integer listId, Model model) {
         controllerProcedure.addMastAttribute(model);
 
         TodoListForm todoListForm = new TodoListForm();
 
-        if (editFlag.equals(NEW_CREATION)) {
-            model.addAttribute("editFlag", NEW_CREATION);
-        } else if (editFlag.equals(EDIT)) {
+        if (isUpdate) {
             todoListForm = todoListService.getTodoListByListId(listId);
             model.addAttribute("editFlag", EDIT);
+        } else {
+            model.addAttribute("editFlag", NEW_CREATION);
         }
-        model.addAttribute("todoList", todoListForm);
+        model.addAttribute("todoListForm", todoListForm);
 
         return "/main/editing";
     }
@@ -104,19 +106,23 @@ public class MainController {
      * TOdoリストの新規登録の処理を実行した後、
      * 未完了リスト画面に遷移
      *
-     * @param contents 新規登録するTodoリストの内容
-     * @param limit 新規登録するTodoリストの期限
+     * @param form 入力のTodoリストフォーム
+     * @param result エラー格納変数
      * @param model モデル
      * @return 未完了リスト画面のアドレス
      */
     @RequestMapping(value = "/main/editTodoList", params = "insert")
-    String insertTodoList(@RequestParam() String contents, @RequestParam() String limit, Model model) {
-        controllerProcedure.addMastAttribute(model);
+    String insertTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            controllerProcedure.addMastAttribute(model);
+            return "/main/editing";
+        }
+
         TodoList todoList = new TodoList();
 
         todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
-        todoList.setListContents(contents);
-        todoList.setListLimit(limit);
+        todoList.setListContents(form.getListContents());
+        todoList.setListLimit(form.getListLimit());
 
         todoListService.insertTodoList(todoList);
 
@@ -162,7 +168,7 @@ public class MainController {
      */
     @RequestMapping(value = "/main/editTodoList", params = "editId")
     String editTodoList(@RequestParam() Integer editId, RedirectAttributes redirectAttribute) {
-        redirectAttribute.addAttribute("editFlag", EDIT);
+        redirectAttribute.addAttribute("isUpdate", EDIT);
         redirectAttribute.addAttribute("listId", editId);
 
         return "redirect:/main/editing";
@@ -172,20 +178,20 @@ public class MainController {
      * 入力された情報をもとにTodoリストを編集し、
      * 未完了リスト画面に遷移する
      *
-     * @param updateId 編集（更新）対象のlistId
-     * @param contents 編集内容：Todoリストの内容
-     * @param limit 編集内容：Todoリストの期限
+     * @param form 入力のTodoリストフォーム
+     * @param result エラー格納変数
      * @param model モデル
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "updateId")
-    String editTodoList(
-            @RequestParam() Integer updateId,
-            @RequestParam() String contents,
-            @RequestParam() String limit,
-            Model model) {
+    @RequestMapping(value = "/main/editTodoList", params = "update")
+    String editTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            controllerProcedure.addMastAttribute(model);
+            model.addAttribute("todoListForm", form);
+            return "/main/editing";
+        }
 
-        todoListService.updateTodoList(updateId, contents, limit);
+        todoListService.updateTodoList(form.getListId(), form.getListContents(), form.getListLimit());
 
         return "redirect:/main/processing";
     }

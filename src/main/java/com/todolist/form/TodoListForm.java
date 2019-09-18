@@ -1,5 +1,7 @@
 package com.todolist.form;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -12,10 +14,9 @@ import javax.validation.constraints.Size;
  */
 public class TodoListForm {
 
-    @NotNull
     private Integer listId;
 
-    @Size(max = 50)
+    @Size(min = 1, max = 30)
     private String listContents;
 
     @Size(max = 10)

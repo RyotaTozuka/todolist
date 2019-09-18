@@ -10,15 +10,13 @@
 <body>
 <div th:replace="header/header.html"></div>
 <div class="main">
-    <div th:if="${editFlag}">
-        <h1 align="center">編集画面</h1>
-    </div>
-    <div th:unless="${editFlag}">
-        <h1 align="center">新規登録画面</h1>
+    <div>
+        <h1 align="center"><span th:text="${#bools.isTrue(isUpdate) ? '編集画面' : '新規登録画面' }" /></h1>
     </div>
 
     <div>
-        <form action="editTodoList" method="get">
+        <form action="editTodoList" th:object="${todoListForm}" method="get">
+            <div align="center" th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}" style="color: red"></div>
             <table align="center" border="1">
                 <tbody>
                 <tr align="left">
@@ -27,13 +25,14 @@
                     <th></th>
                 </tr>
                 <tr>
-                    <td><input type="text" name="contents" th:value="${todoList.listContents}"></td>
-                    <td><input type="date" name="limit" th:value="${todoList.listLimit}"></td>
+                    <td><input type="text" th:field="*{listContents}" th:errorclass="fieldError"></td>
+                    <td><input type="date" th:field="*{listLimit}"></td>
                     <td>
-                        <div th:if="${editFlag}">
-                            <button type="submit" name="updateId" th:value="${todoList.listId}">編集</button>
+                        <div th:if="${isUpdate}">
+                            <input type="hidden" th:field="*{listId}">
+                            <button type="submit" name="update">編集</button>
                         </div>
-                        <div th:unless="${editFlag}">
+                        <div th:unless="${isUpdate}">
                             <button type="submit" name="insert">新規登録</button>
                         </div>
                     </td>
