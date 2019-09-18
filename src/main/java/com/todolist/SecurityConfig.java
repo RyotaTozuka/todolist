@@ -49,8 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //loginページの設定
                 .formLogin()
-                .loginProcessingUrl("/login")
                 .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .failureUrl("/login?error")
                 .defaultSuccessUrl("/main/processing", true)
                 .usernameParameter("username")
                 .passwordParameter("password")
