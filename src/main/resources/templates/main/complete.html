@@ -13,7 +13,11 @@
         <h1 align="center">リスト一覧（完了しているもの）</h1>
     </div>
 
-    <div>
+    <div align="center" th:if="${todoLists.size() == 0}">
+        <p>完了したTodoリストはありません。</p>
+    </div>
+
+    <div th:if="${todoLists.size() != 0}">
         <form action="editTodoList" method="get">
             <input type="hidden" name="status" value="complete">
             <table align="center" border="1">
@@ -26,7 +30,7 @@
                 </tr>
                 <tr th:each="todoList:${todoLists}">
                     <td th:text="${todoList.listContents}"></td>
-                    <td th:text="${todoList.listLimit}"></td>
+                    <td th:text="${#strings.isEmpty(todoList.listLimit) ? '期限なし' : todoList.listLimit}"></td>
                     <td><button type="submit" name="processingId" th:value="${todoList.listId}">未完了にする</button></td>
                     <td><button type="submit" name="deleteId" th:value="${todoList.listId}">削除</button></td>
                 </tr>
