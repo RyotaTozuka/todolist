@@ -1,6 +1,7 @@
 package com.todolist.webApp;
 
 import com.todolist.form.UserInformationForm;
+import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
 import com.todolist.service.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class AdminController {
     private UserInformationService userInformationService;
 
     @Autowired
+    SecureUserDetailsService secureUserDetailsService;
+
+    @Autowired
     private TodoListService todoListService;
 
     /**
@@ -51,8 +55,11 @@ public class AdminController {
     public String userList(Model model) {
         controllerProcedure.addMastAttribute(model);
 
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         List<UserInformationForm> userInformationForms = userInformationService.selectUserAll();
+
         model.addAttribute("userLists", userInformationForms);
+        model.addAttribute("userId", userId);
 
         return "/admin/userList";
     }

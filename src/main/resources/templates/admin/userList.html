@@ -14,7 +14,6 @@
         <h1>管理者メニュー</h1>
     </div>
     <form action="editUserList" method="get">
-        <input type="hidden" name="status" value="complete">
         <table align="center" border="1">
             <tbody>
             <tr align="left">
@@ -26,8 +25,16 @@
             <tr th:each="userList:${userLists}">
                 <td th:text="${userList.userName}"></td>
                 <td th:text="${userList.userRole}"></td>
-                <td><button type="submit" name="changeRoleId" th:value="${userList.userId}">権限の変更</button></td>
-                <td><button type="submit" name="deleteId" th:value="${userList.userId}">削除</button></td>
+                <td>
+                    <div th:unless="${#strings.equals(userId,userList.userId)}">
+                        <button type="submit" name="changeRoleId" th:value="${userList.userId}">権限の変更</button>
+                    </div>
+                </td>
+                <td>
+                    <div th:unless="${#strings.equals(userId,userList.userId)}">
+                        <button type="submit" name="deleteId" th:value="${userList.userId}">削除</button>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
