@@ -11,11 +11,12 @@
 <div th:replace="header/header.html"></div>
 <div class="main">
     <div>
-        <h1 align="center"><span th:text="${#bools.isTrue(isUpdate) ? '編集画面' : '新規登録画面' }" /></h1>
+        <h1 align="center"><span th:text="${#bools.isTrue(isCreate) ? '新規登録画面' : '編集画面' }" /></h1>
     </div>
 
     <div>
         <form action="editTodoList" th:object="${todoListForm}" method="get">
+            <input type="hidden" th:field="*{listId}">
             <div align="center" th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}" style="color: red"></div>
             <table align="center" border="1">
                 <tbody>
@@ -28,12 +29,11 @@
                     <td><input type="text" th:field="*{listContents}" th:errorclass="fieldError"></td>
                     <td><input type="date" th:field="*{listLimit}"></td>
                     <td>
-                        <div th:if="${isUpdate}">
-                            <input type="hidden" th:field="*{listId}">
-                            <button type="submit" name="update">編集</button>
-                        </div>
-                        <div th:unless="${isUpdate}">
+                        <div th:if="${isCreate}">
                             <button type="submit" name="insert">新規登録</button>
+                        </div>
+                        <div th:unless="${isCreate}">
+                            <button type="submit" name="update">編集</button>
                         </div>
                     </td>
                 </tr>

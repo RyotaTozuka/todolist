@@ -25,9 +25,6 @@ import java.util.List;
  */
 @Controller
 public class MainController {
-    //mainEditingで使用
-    private static final boolean NEW_CREATION = false;
-    private static final boolean EDIT = true;
 
     @Autowired
     private TodoListService todoListService;
@@ -80,24 +77,22 @@ public class MainController {
     /**
      * Todoリストの編集画面に遷移する
      *
-     * @param isUpdate false:新規登録、true:既存リストの編集（更新）
+     * @param isCreate true:新規登録、false:既存リストの編集（更新）
      * @param listId TodoリストのId
      * @param model モデル
      * @return Todoリスト編集画面のアドレス
      */
     @RequestMapping("/main/editing")
-    String mainEditing(@RequestParam() boolean isUpdate, @RequestParam(defaultValue = "0") Integer listId, Model model) {
+    String mainEditing(@RequestParam() boolean isCreate, @RequestParam(defaultValue = "0") Integer listId, Model model) {
         controllerProcedure.addMastAttribute(model);
 
         TodoListForm todoListForm = new TodoListForm();
 
-        if (isUpdate) {
+        if (!isCreate) {
             todoListForm = todoListService.getTodoListByListId(listId);
-            model.addAttribute("editFlag", EDIT);
-        } else {
-            model.addAttribute("editFlag", NEW_CREATION);
         }
         model.addAttribute("todoListForm", todoListForm);
+        model.addAttribute("isCreate", isCreate);
 
         return "/main/editing";
     }
@@ -168,7 +163,7 @@ public class MainController {
      */
     @RequestMapping(value = "/main/editTodoList", params = "editId")
     String editTodoList(@RequestParam() Integer editId, RedirectAttributes redirectAttribute) {
-        redirectAttribute.addAttribute("isUpdate", EDIT);
+        redirectAttribute.addAttribute("isCreate", false);
         redirectAttribute.addAttribute("listId", editId);
 
         return "redirect:/main/editing";
