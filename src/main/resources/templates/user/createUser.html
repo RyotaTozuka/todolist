@@ -16,16 +16,20 @@
         </p>
     </div>
     <div align="center">
-        <form method="post" th:action="@{/user/insertUser}">
+        <form method="post" th:action="@{/user/insertUser}" th:object="${userInformationForm}">
+            <input type="hidden" th:field="*{userId}">
+
             <div class="errMsg" th:if="${userNameNotUnique}">usernameがすでに登録されています。</div>
             <div class="errMsg" th:if="${passwordNotTheSame}">パスワードが一致しません</div>
+            <div align="center" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" style="color: red"></div>
+
             <label>username</label><br>
-            <input type="text" name="userName" placeholder="username" autofocus required/><br>
+            <input type="text" th:field="*{userName}" placeholder="username" autofocus required/><br>
             <label>password</label><br>
             <input type="password" name="passwordFirst" placeholder="password" required/><br>
             <input type="password" name="passwordSecond" placeholder="password (again)" required/><br><br>
             <div th:if="${userRole}">
-                <input type="checkbox" name="newUsersRole" value="ROLE_ADMIN">管理者権限
+                <input type="checkbox" th:field="*{userRole}" value="ROLE_ADMIN">管理者権限
             </div><br>
             <input type="submit" value="ユーザ作成"/>
         </form>

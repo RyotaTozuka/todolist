@@ -1,15 +1,19 @@
 package com.todolist.webApp;
 
 import com.todolist.entity.UserInformation;
+import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 /**
  * @author Ryota Tozuka
@@ -30,6 +34,11 @@ public class UserController {
 
     @Autowired
     private ControllerProcedure controllerProcedure;
+
+    @ModelAttribute
+    UserInformationForm setUpForm() {
+        return new UserInformationForm();
+    }
 
     /**
      * パスワード変更画面に遷移
@@ -91,9 +100,11 @@ public class UserController {
                              Model model) {
 
         controllerProcedure.addMastAttribute(model);
+        UserInformationForm userInformationForm = new UserInformationForm();
 
         model.addAttribute("userNameNotUnique", userNameNotUnique);
         model.addAttribute("passwordNotTheSame", passwordNotTheSame);
+        model.addAttribute("userInformationForm", userInformationForm);
 
         return "/user/createUser";
     }
@@ -102,39 +113,47 @@ public class UserController {
      * 入力されたユーザ情報に基づき、ユーザ情報を新規登録し、
      * ログイン画面に遷移、管理者の場合は管理者メニュー画面に遷移
      *
-     * @param userName 登録内容：ユーザ名
      * @param passwordFirst 登録内容：パスワード一回目
      * @param passwordSecond 登録内容：パスワード二回目
-     * @param newUsersRole 登録内容：管理者権限（デフォルトは一般権限）
+     * @param form 入力されたユーザ情報
+     * @param result エラー格納変数
+     * @param model モデル
      * @return 一般ユーザ：login画面、管理者：管理者メニュー
      */
     @RequestMapping(value="/user/insertUser", method=RequestMethod.POST)
     public String insertUser(
-            @RequestParam() String userName,
             @RequestParam() String passwordFirst,
             @RequestParam() String passwordSecond,
-            @RequestParam(defaultValue = "ROLE_USER") String newUsersRole, RedirectAttributes redirectAttributes) {
+            @ModelAttribute("userInformationForm") @Valid UserInformationForm form,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+            controllerProcedure.addMastAttribute(model);
+            return "/user/createUser";
+        }
 
         String userRole = secureUserDetailsService.getUserInformation().getUserRole();
 
         //userName uniqueチェック
-        if (!userInformationService.isUniqueUserName(userName)) {
-            redirectAttributes.addAttribute("userNameNotUnique",true);
-            return "redirect:/user/createUser";
+        if (!userInformationService.isUniqueUserName(form.getUserName())) {
+            model.addAttribute("userNameNotUnique",true);
+            return "/user/createUser";
         }
 
         //新パスワードの一回目と二回目の入力値が異なる場合はパスワード変更画面に戻る
         if (!passwordFirst.matches(passwordSecond)) {
-            redirectAttributes.addAttribute("passwordNotTheSame", true);
-            return "redirect:/user/createUser";
+            model.addAttribute("passwordNotTheSame", true);
+            return "/user/createUser";
         }
 
         UserInformation userInformation = new UserInformation();
-        userInformation.setUserName(userName);
+        userInformation.setUserName(form.getUserName());
         userInformation.setUserPassword(passwordFirst);
 
-        if (("ROLE_ADMIN").matches(newUsersRole)) {
-            userInformation.setUserRole("ROLE_ADMIN");
+        //ユーザ権限が設定されていなければ、一般ユーザ権限を設定
+        if (form.getUserRole() != null) {
+            userInformation.setUserRole(form.getUserRole());
         } else {
             userInformation.setUserRole("ROLE_USER");
         }

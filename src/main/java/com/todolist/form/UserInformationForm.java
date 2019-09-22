@@ -1,6 +1,7 @@
 package com.todolist.form;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author Ryota Tozuka
@@ -11,12 +12,11 @@ import javax.validation.constraints.NotNull;
  */
 public class UserInformationForm {
 
-    @NotNull
     private Integer userId;
 
+    @Size(min = 1, max = 20)
     private String userName;
 
-    @NotNull
     private String userRole;
 
     public Integer getUserId() {
