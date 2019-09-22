@@ -9,31 +9,31 @@
 </head>
 <body>
 <div th:replace="header/header.html"></div>
-<div class="main">
+<div class="main" align="center">
     <div>
-        <h1 align="center"><span th:text="${#bools.isTrue(isCreate) ? '新規登録画面' : '編集画面' }" /></h1>
+        <h1><span th:text="${#bools.isTrue(isCreate) ? '新規登録画面' : '編集画面' }" /></h1>
     </div>
 
     <div>
-        <form action="editTodoList" th:object="${todoListForm}" method="get">
+        <form method="get" th:action="@{/main/editTodoList}" th:object="${todoListForm}">
             <input type="hidden" th:field="*{listId}">
-            <div align="center" th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}" style="color: red"></div>
-            <table align="center" border="1">
+            <div th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}" style="color: red"></div>
+            <table>
                 <tbody>
                 <tr align="left">
-                    <th>内容</th>
-                    <th>期限</th>
-                    <th></th>
+                    <th class="contents">内容</th>
+                    <th class="limit">期限</th>
+                    <th class="button"></th>
                 </tr>
                 <tr>
-                    <td><input type="text" th:field="*{listContents}" th:errorclass="fieldError"></td>
-                    <td><input type="date" th:field="*{listLimit}"></td>
+                    <td class="data"><input type="text" th:field="*{listContents}" th:errorclass="fieldError"></td>
+                    <td class="data"><input type="date" th:field="*{listLimit}"></td>
                     <td>
                         <div th:if="${isCreate}">
-                            <button type="submit" name="insert">新規登録</button>
+                            <button class="todo-list" name="insert">新規登録</button>
                         </div>
                         <div th:unless="${isCreate}">
-                            <button type="submit" name="update">編集</button>
+                            <button class="todo-list" name="update">編集</button>
                         </div>
                     </td>
                 </tr>

@@ -9,19 +9,19 @@
 </head>
 <div th:replace="header/header.html"></div>
 <body>
-<div class="main">
+<div class="main" align="center">
     <div>
         <p>
-        <h1 align="center" id="title">ユーザ登録</h1>
+        <h1>ユーザ登録</h1>
         </p>
     </div>
-    <div align="center">
+    <div>
         <form method="post" th:action="@{/user/insertUser}" th:object="${userInformationForm}">
             <input type="hidden" th:field="*{userId}">
 
             <div class="errMsg" th:if="${userNameNotUnique}">usernameがすでに登録されています。</div>
             <div class="errMsg" th:if="${passwordNotTheSame}">パスワードが一致しません</div>
-            <div align="center" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" style="color: red"></div>
+            <div class="errMsg" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
 
             <label>username</label><br>
             <input type="text" th:field="*{userName}" placeholder="username" autofocus required/><br>
@@ -31,7 +31,7 @@
             <div th:if="${userRole}">
                 <input type="checkbox" th:field="*{userRole}" value="ROLE_ADMIN">管理者権限
             </div><br>
-            <input type="submit" value="ユーザ作成"/>
+            <button>ユーザ作成</button>
         </form>
     </div>
 </div>

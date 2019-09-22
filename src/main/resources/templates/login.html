@@ -10,7 +10,7 @@
 <div class="main" align="center">
     <div>
         <p>
-        <h1 id="title">ToDoリストアプリ</h1>
+        <h1>ToDoリストアプリ</h1>
         </p>
     </div>
     <div>
@@ -20,11 +20,11 @@
             <input type="text" name="username" placeholder="username" autofocus required/><br>
             <label>password</label><br>
             <input type="password" name="password" placeholder="password" required/><br><br>
-            <input type="submit" value="ログイン"/>
+            <button>ログイン</button>
         </form>
     </div><br>
     <div>
-        <span>ユーザ登録は</span><a href="/user/createUser">こちら</a>
+        <span>ユーザ登録は</span><a th:href="@{/user/createUser}">こちら</a>
     </div>
 </div>
 </body>

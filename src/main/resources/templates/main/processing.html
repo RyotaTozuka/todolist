@@ -9,45 +9,45 @@
 </head>
 <body>
 <div th:replace="header/header.html"></div>
-<div class="main">
+<div class="main" align="center">
     <div>
-        <h1 align="center">リスト一覧</h1>
+        <h1>リスト一覧</h1>
     </div>
 
-    <form action="editing" method="get">
-        <div align="center">
-            <button type="submit" name="isCreate" value="true">新規登録</button>
+    <form method="get" th:action="@{/main/editing}">
+        <div>
+            <button class="todo-list" name="isCreate" value="true">新規登録</button>
         </div>
     </form>
 
-    <div align="center" th:if="${todoLists.size() == 0}">
+    <div th:if="${todoLists.size() == 0}">
         <p>Todoリストに登録がありません。</p>
     </div>
 
     <div th:if="${todoLists.size() != 0}">
         <form action="editTodoList" method="get">
-            <table align="center" border="1">
+            <table>
                 <tbody>
                 <tr align="left">
-                    <th>内容</th>
-                    <th>期限</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th class="contents">内容</th>
+                    <th class="limit">期限</th>
+                    <th class="button"></th>
+                    <th class="button"></th>
+                    <th class="button"></th>
                 </tr>
-                <tr th:each="todoList:${todoLists}">
-                    <td th:text="${todoList.listContents}"></td>
-                    <td th:text="${#strings.isEmpty(todoList.listLimit) ? '期限なし' : todoList.listLimit}"></td>
-                    <td><button type="submit" name="completeId" th:value="${todoList.listId}">完了</button></td>
-                    <td><button type="submit" name="editId" th:value="${todoList.listId}">編集</button></td>
-                    <td><button type="submit" name="deleteId" th:value="${todoList.listId}">削除</button></td>
+                <tr th:each="todoList:${todoLists}" th:object="${todoList}">
+                    <td class="data" th:text="*{listContents}"></td>
+                    <td class="data" th:text="${#strings.isEmpty(todoList.listLimit) ? '期限なし' : todoList.listLimit}"></td>
+                    <td><button class="todo-list" name="completeId" th:value="*{listId}">完了</button></td>
+                    <td><button class="todo-list" name="editId" th:value="*{listId}">編集</button></td>
+                    <td><button class="todo-list" name="deleteId" th:value="*{listId}">削除</button></td>
                 </tr>
                 </tbody>
             </table>
         </form>
     </div>
-    <div align="center">
-        <a href="complete">完了したものを表示</a>
+    <div>
+        <a th:href="@{/main/complete}">完了したものを表示</a>
     </div>
 </div>
 </body>

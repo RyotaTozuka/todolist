@@ -13,26 +13,26 @@
     <div>
         <h1>管理者メニュー</h1>
     </div>
-    <form action="editUserList" method="get">
-        <table align="center" border="1">
+    <form method="get" th:action="@{/admin/editUserList}">
+        <table>
             <tbody>
             <tr align="left">
-                <th>ユーザ名</th>
-                <th>管理者権限</th>
-                <th></th>
-                <th></th>
+                <th class="user-name">ユーザ名</th>
+                <th class="user-role">管理者権限</th>
+                <th class="button"></th>
+                <th class="button"></th>
             </tr>
             <tr th:each="userList:${userLists}">
-                <td th:text="${userList.userName}"></td>
-                <td th:text="${userList.userRole}"></td>
+                <td class="data" th:text="${userList.userName}"></td>
+                <td class="data" th:text="${userList.userRole}"></td>
                 <td>
                     <div th:unless="${#strings.equals(userId,userList.userId)}">
-                        <button type="submit" name="changeRoleId" th:value="${userList.userId}">権限の変更</button>
+                        <button class="todo-list" name="changeRoleId" th:value="${userList.userId}">権限の変更</button>
                     </div>
                 </td>
                 <td>
                     <div th:unless="${#strings.equals(userId,userList.userId)}">
-                        <button type="submit" name="deleteId" th:value="${userList.userId}">削除</button>
+                        <button class="todo-list" name="deleteId" th:value="${userList.userId}">削除</button>
                     </div>
                 </td>
             </tr>
