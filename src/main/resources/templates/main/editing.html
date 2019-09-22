@@ -17,16 +17,17 @@
     <div>
         <form method="get" th:action="@{/main/editTodoList}" th:object="${todoListForm}">
             <input type="hidden" th:field="*{listId}">
+            <br><br><br>
             <div th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}" style="color: red"></div>
             <table>
                 <tbody>
                 <tr align="left">
                     <th class="contents">内容</th>
                     <th class="limit">期限</th>
-                    <th class="button"></th>
+                    <th class="button-wide"></th>
                 </tr>
                 <tr>
-                    <td class="data"><input type="text" th:field="*{listContents}" th:errorclass="fieldError"></td>
+                    <td class="data"><input type="text" style="width:500px" th:field="*{listContents}" th:errorclass="fieldError"></td>
                     <td class="data"><input type="date" th:field="*{listLimit}"></td>
                     <td>
                         <div th:if="${isCreate}">

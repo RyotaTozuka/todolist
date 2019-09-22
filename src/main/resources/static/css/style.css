@@ -24,19 +24,18 @@ header {
 }
 
 table {
-    width: 60%;
     border-collapse: collapse;
 }
 
 th.contents {
-    width: 70%;
+    width: 600px;
     color: #ffffff;
     background-color: #0066ff;
     border: solid 1px #ccccff;
 }
 
 th.limit {
-    width: 15%;
+    width: 150px;
     color: #ffffff;
     background-color: #0066ff;
     border: solid 1px #ccccff;
@@ -50,14 +49,19 @@ th.user-name {
 }
 
 th.user-role {
-    width: 20%;
+    width: 200px;
     color: #ffffff;
     background-color: #0066ff;
     border: solid 1px #ccccff;
 }
 
 th.button {
-    width: 5%;
+    width: 70px;
+    background: #ffffff;
+}
+
+th.button-wide {
+    width: 105px;
     background: #ffffff;
 }
 

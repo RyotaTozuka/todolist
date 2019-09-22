@@ -20,13 +20,14 @@
     <div th:if="${todoLists.size() != 0}">
         <form method="get" th:action="@{/main/editTodoList}" >
             <input type="hidden" name="status" value="complete">
+            <br><br><br>
             <table>
                 <tbody>
                 <tr align="left">
                     <th class="contents">内容</th>
                     <th class="limit">期限</th>
-                    <th class="button"></th>
-                    <th class="button"></th>
+                    <th class="button-wide"></th>
+                    <th class="button-wide"></th>
                 </tr>
                 <tr th:each="todoList:${todoLists}">
                     <td class="data" th:text="${todoList.listContents}"></td>

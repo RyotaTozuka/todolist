@@ -15,9 +15,11 @@
     </div>
 
     <form method="get" th:action="@{/main/editing}">
+        <br>
         <div>
             <button class="todo-list" name="isCreate" value="true">新規登録</button>
         </div>
+        <br>
     </form>
 
     <div th:if="${todoLists.size() == 0}">
