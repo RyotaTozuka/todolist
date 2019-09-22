@@ -108,6 +108,17 @@ public class UserInformationService {
         return userInformationDao.delete(userInformation);
     }
 
+    public boolean isUniqueUserName(String userName) {
+        List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
+
+        for ( UserInformationDto userInformationDto : userInformationDtos) {
+            if (userName.matches(userInformationDto.getUserName())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * パスワードをencodeする
      * encoderはBCryptPasswordEncoderを使用

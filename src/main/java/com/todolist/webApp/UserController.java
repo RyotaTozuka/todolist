@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Ryota Tozuka
@@ -80,11 +81,20 @@ public class UserController {
      * ユーザ新規作成画面に遷移
      *
      * @param model モデル
+     * @param userNameNotUnique ユーザ作成時、登録ユーザ名が既に存在する場合、trueでリダイレクトされる
+     * @param passwordNotTheSame ユーザ作成時、パスワードが1回目と2回目で一致しない場合、trueでリダイレクトされる
      * @return ユーザ新規作成画面のアドレス
      */
     @RequestMapping("user/createUser")
-    public String createUser(Model model) {
+    public String createUser(@RequestParam(defaultValue = "false") boolean userNameNotUnique,
+                             @RequestParam(defaultValue = "false") boolean passwordNotTheSame,
+                             Model model) {
+
         controllerProcedure.addMastAttribute(model);
+
+        model.addAttribute("userNameNotUnique", userNameNotUnique);
+        model.addAttribute("passwordNotTheSame", passwordNotTheSame);
+
         return "/user/createUser";
     }
 
@@ -103,12 +113,20 @@ public class UserController {
             @RequestParam() String userName,
             @RequestParam() String passwordFirst,
             @RequestParam() String passwordSecond,
-            @RequestParam(defaultValue = "ROLE_USER") String newUsersRole) {
+            @RequestParam(defaultValue = "ROLE_USER") String newUsersRole, RedirectAttributes redirectAttributes) {
+
+        String userRole = secureUserDetailsService.getUserInformation().getUserRole();
+
+        //userName uniqueチェック
+        if (!userInformationService.isUniqueUserName(userName)) {
+            redirectAttributes.addAttribute("userNameNotUnique",true);
+            return "redirect:/user/createUser";
+        }
 
         //新パスワードの一回目と二回目の入力値が異なる場合はパスワード変更画面に戻る
-        //todo:精査エラーの実装
         if (!passwordFirst.matches(passwordSecond)) {
-            return "user/createUser";
+            redirectAttributes.addAttribute("passwordNotTheSame", true);
+            return "redirect:/user/createUser";
         }
 
         UserInformation userInformation = new UserInformation();
@@ -122,8 +140,6 @@ public class UserController {
         }
 
         userInformationService.insertUserInformation(userInformation);
-
-        String userRole = secureUserDetailsService.getUserInformation().getUserRole();
 
         //ユーザがログインしており、管理者である場合は管理者メニュー画面に遷移
         if (("ROLE_ADMIN").matches(userRole)) {

@@ -17,6 +17,8 @@
     </div>
     <div align="center">
         <form method="post" th:action="@{/user/insertUser}">
+            <div class="errMsg" th:if="${userNameNotUnique}">usernameがすでに登録されています。</div>
+            <div class="errMsg" th:if="${passwordNotTheSame}">パスワードが一致しません</div>
             <label>username</label><br>
             <input type="text" name="userName" placeholder="username" autofocus required/><br>
             <label>password</label><br>
