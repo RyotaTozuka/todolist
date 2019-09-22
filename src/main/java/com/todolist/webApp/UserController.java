@@ -94,7 +94,7 @@ public class UserController {
      * @param passwordNotTheSame ユーザ作成時、パスワードが1回目と2回目で一致しない場合、trueでリダイレクトされる
      * @return ユーザ新規作成画面のアドレス
      */
-    @RequestMapping("user/createUser")
+    @RequestMapping("/user/createUser")
     public String createUser(@RequestParam(defaultValue = "false") boolean userNameNotUnique,
                              @RequestParam(defaultValue = "false") boolean passwordNotTheSame,
                              Model model) {
