@@ -70,14 +70,14 @@ public class UserController {
         controllerProcedure.addMastAttribute(model);
 
         //旧パスワードが違う場合はパスワード変更画面に戻る
-        //todo:精査エラーの実装
         if (!secureUserDetailsService.checkPasswordValidation(oldPassword)) {
+            model.addAttribute("oldPasswordMissMatch", true);
             return "/user/changePassword";
         }
 
         //新パスワードの一回目と二回目の入力値が異なる場合はパスワード変更画面に戻る
-        //todo:精査エラーの実装
         if (!newPasswordFirst.equals(newPasswordSecond)) {
+            model.addAttribute("newPasswordMissMatch", true);
             return "/user/changePassword";
         }
 
