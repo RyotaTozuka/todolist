@@ -70,7 +70,7 @@ public class UserController {
         controllerProcedure.addMastAttribute(model);
 
         //旧パスワードが違う場合はパスワード変更画面に戻る
-        if (!secureUserDetailsService.checkPasswordValidation(oldPassword)) {
+        if (!secureUserDetailsService.checkPasswordIsValidated(oldPassword)) {
             model.addAttribute("oldPasswordMissMatch", true);
             return "/user/changePassword";
         }

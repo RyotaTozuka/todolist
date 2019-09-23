@@ -207,7 +207,7 @@ public class MainController {
      */
     @RequestMapping(value = "/main/editTodoList", params = "deleteId")
     String deleteTodoList(@RequestParam() Integer deleteId, @RequestParam(defaultValue = "NO_STATE") String status) {
-        todoListService.deleteTodoList(deleteId);
+        todoListService.deleteListByListId(deleteId);
 
         /*完了リスト画面からの遷移の場合、statusに"complete"が入っている
         それ以外は、未完了リストから遷移したとみなす */

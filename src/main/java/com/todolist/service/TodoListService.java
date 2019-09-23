@@ -32,9 +32,10 @@ public class TodoListService {
      * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
      */
     public List<TodoListForm> getTodoListByUserIdAndFlag(Integer userId, boolean isComplete) {
-        List<TodoListForm> todoListForms = new ArrayList<>();
         List<TodoListDto> todoListDtos = todoListDao.selectTodoListByUserIdAndCompleteFlag(userId, isComplete);
+        List<TodoListForm> todoListForms = new ArrayList<>();
 
+        //Dto⇒Formクラスにデータコピー
         for (TodoListDto todoListDto : todoListDtos) {
             TodoListForm todoListForm = new TodoListForm();
             BeanUtils.copyProperties(todoListDto, todoListForm);
@@ -52,6 +53,7 @@ public class TodoListService {
     public TodoListForm getTodoListByListId(Integer listId) {
         TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
         TodoListForm todoListForm = new TodoListForm();
+
         BeanUtils.copyProperties(todoListDto,todoListForm);
 
         return todoListForm;
@@ -95,7 +97,6 @@ public class TodoListService {
         return todoListDao.update(todoList);
     }
 
-
     /**
      * 入力された情報をもとにTodoListのレコード更新をする
      *
@@ -118,7 +119,7 @@ public class TodoListService {
      * @param listId リストId
      * @return 削除完了件数（1ならば正常、0ならば異常）
      */
-    public int deleteTodoList(Integer listId) {
+    public int deleteListByListId(Integer listId) {
         TodoList todoList = new TodoList();
         todoList.setListId(listId);
 
@@ -140,7 +141,7 @@ public class TodoListService {
     }
 
     /**
-     * 入力されたuserIdに紐づくレコードを全権削除
+     * 入力されたuserIdに紐づくレコードを全件削除
      *
      * @param userId ログイン中のユーザId
      * @return 削除完了件数

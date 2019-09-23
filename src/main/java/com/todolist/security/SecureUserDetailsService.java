@@ -71,7 +71,7 @@ public class SecureUserDetailsService implements UserDetailsService {
      * @param password 入力されたパスワード（未encode）
      * @return 一致している場合、true
      */
-    public boolean checkPasswordValidation(String password) {
+    public boolean checkPasswordIsValidated(String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         UserInformation userInformation = getUserInformation();
 

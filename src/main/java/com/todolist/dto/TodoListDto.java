@@ -12,7 +12,9 @@ import org.seasar.doma.Id;
  */
 @Entity
 public class TodoListDto {
-    @Id private Integer listId;
+
+    @Id
+    private Integer listId;
     private String contents;
     private String due;
 

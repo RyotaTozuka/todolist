@@ -17,7 +17,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "user_information")
 public class UserInformation {
 
-    @Id private Integer userId;
+    @Id
+    private Integer userId;
     private String userName;
     private String userPassword;
     @NotNull
