@@ -86,6 +86,7 @@ public class AdminController {
      */
     @RequestMapping(value="/admin/editUserList", params="deleteId")
     public String deleteUser(@RequestParam() Integer deleteId) {
+        //削除対象のユーザに紐づくtodoリストの内容も削除する
         todoListService.deleteListByUserId(deleteId);
         userInformationService.deleteUserByUserId(deleteId);
 
