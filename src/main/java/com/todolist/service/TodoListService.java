@@ -133,11 +133,12 @@ public class TodoListService {
      * @param userId ログイン中のユーザId
      * @return 削除完了件数
      */
-    public int deleteAllCompleteListByUserId(Integer userId) {
+    public int deleteListByUserIdAndFlag(Integer userId, boolean isComplete) {
         TodoList todoList = new TodoList();
         todoList.setUserId(userId);
+        todoList.setIsComplete(isComplete);
 
-        return todoListDao.deleteAllCompleteListByUserId(todoList);
+        return todoListDao.deleteListByUserIdAndCompleteFlag(todoList);
     }
 
     /**

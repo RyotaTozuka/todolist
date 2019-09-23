@@ -39,7 +39,7 @@ public interface TodoListDao {
     int delete(TodoList todoList);
 
     @Delete(sqlFile = true)
-    int deleteAllCompleteListByUserId(TodoList todoList);
+    int deleteListByUserIdAndCompleteFlag(TodoList todoList);
 
     @Delete(sqlFile = true)
     int deleteListByUserId(TodoList todoList);

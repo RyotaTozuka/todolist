@@ -229,7 +229,7 @@ public class MainController {
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
 
         //ログインしているユーザに紐づく全完了リストを削除
-        todoListService.deleteAllCompleteListByUserId(userId);
+        todoListService.deleteListByUserIdAndFlag(userId, true);
 
         return "redirect:/main/processing";
     }
