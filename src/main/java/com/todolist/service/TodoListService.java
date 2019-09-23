@@ -25,32 +25,15 @@ public class TodoListService {
 
     /**
      * userId情報に基づくTodoListを全件抽出する。
+     * isCompleteフラグがマッチするものを抽出する。
      *
      * @param userId ユーザID
+     * @param isComplete true：完了しているリスト、false：未完了のリスト
      * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
      */
-    public List<TodoListForm> getTodoListByUserId(Integer userId) {
+    public List<TodoListForm> getTodoListByUserIdAndFlag(Integer userId, boolean isComplete) {
         List<TodoListForm> todoListForms = new ArrayList<>();
-        List<TodoListDto> todoListDtos = todoListDao.selectProcessingListByUserId(userId);
-
-        for (TodoListDto todoListDto : todoListDtos) {
-            TodoListForm todoListForm = new TodoListForm();
-            BeanUtils.copyProperties(todoListDto, todoListForm);
-            todoListForms.add(todoListForm);
-        }
-        return todoListForms;
-    }
-
-    /**
-     * userId情報に基づくTodoListのうち、ステータス：完了のものを全件抽出する。
-     * (ListCompleteFlag = true: 完了、 false: 未完了)
-     *
-     * @param userId ユーザID
-     * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
-     */
-    public List<TodoListForm> getCompleteListByUserId(Integer userId) {
-        List<TodoListForm> todoListForms = new ArrayList<>();
-        List<TodoListDto> todoListDtos = todoListDao.selectCompleteListByUserId(userId);
+        List<TodoListDto> todoListDtos = todoListDao.selectTodoListByUserIdAndCompleteFlag(userId, isComplete);
 
         for (TodoListDto todoListDto : todoListDtos) {
             TodoListForm todoListForm = new TodoListForm();

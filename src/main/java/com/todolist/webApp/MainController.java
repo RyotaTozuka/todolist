@@ -52,7 +52,7 @@ public class MainController {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
 
         //未完了のTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserId(userInformation.getUserId());
+        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
         model.addAttribute("todoLists", todoListForms);
         return "/main/processing";
     }
@@ -69,7 +69,7 @@ public class MainController {
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
 
         //完了したTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getCompleteListByUserId(userInformation.getUserId());
+        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
         model.addAttribute("todoLists", todoListForms);
         return "/main/complete";
     }

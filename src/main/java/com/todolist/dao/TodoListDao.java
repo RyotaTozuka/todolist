@@ -21,10 +21,7 @@ import java.util.List;
 public interface TodoListDao {
 
     @Select
-    List<TodoListDto> selectProcessingListByUserId(Integer userId);
-
-    @Select
-    List<TodoListDto> selectCompleteListByUserId(Integer userId);
+    List<TodoListDto> selectTodoListByUserIdAndCompleteFlag(Integer userId, boolean isComplete);
 
     @Select
     TodoListDto selectTodoListByListId(Integer listId);
