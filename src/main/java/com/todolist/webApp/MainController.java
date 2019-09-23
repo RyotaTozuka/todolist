@@ -107,9 +107,15 @@ public class MainController {
      * @return 未完了リスト画面のアドレス
      */
     @RequestMapping(value = "/main/editTodoList", params = "insert")
-    String insertTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form, BindingResult result, Model model) {
+    String insertTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form,
+                          BindingResult result,
+                          @RequestParam("isCreate") boolean isCreate,
+                          Model model) {
+        controllerProcedure.addMastAttribute(model);
+
         if (result.hasErrors()) {
-            controllerProcedure.addMastAttribute(model);
+            model.addAttribute("isCreate", isCreate);
+            model.addAttribute("todoListForm", form);
             return "/main/editing";
         }
 

@@ -128,12 +128,11 @@ public class UserController {
             BindingResult result,
             Model model) {
 
+        controllerProcedure.addMastAttribute(model);
+
         if (result.hasErrors()) {
-            controllerProcedure.addMastAttribute(model);
             return "/user/createUser";
         }
-
-        String userRole = secureUserDetailsService.getUserInformation().getUserRole();
 
         //userName uniqueチェック
         if (!userInformationService.isUniqueUserName(form.getUserName())) {
@@ -159,6 +158,8 @@ public class UserController {
         }
 
         userInformationService.insertUserInformation(userInformation);
+
+        String userRole = secureUserDetailsService.getUserInformation().getUserRole();
 
         //ユーザがログインしており、管理者である場合は管理者メニュー画面に遷移
         if (("ROLE_ADMIN").matches(userRole)) {
