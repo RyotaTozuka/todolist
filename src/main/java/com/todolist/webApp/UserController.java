@@ -90,20 +90,14 @@ public class UserController {
      * ユーザ新規作成画面に遷移
      *
      * @param model モデル
-     * @param userNameNotUnique ユーザ作成時、登録ユーザ名が既に存在する場合、trueでリダイレクトされる
-     * @param passwordNotTheSame ユーザ作成時、パスワードが1回目と2回目で一致しない場合、trueでリダイレクトされる
      * @return ユーザ新規作成画面のアドレス
      */
     @RequestMapping("/user/createUser")
-    public String createUser(@RequestParam(defaultValue = "false") boolean userNameNotUnique,
-                             @RequestParam(defaultValue = "false") boolean passwordNotTheSame,
-                             Model model) {
+    public String createUser(Model model) {
 
         controllerProcedure.addMastAttribute(model);
         UserInformationForm userInformationForm = new UserInformationForm();
 
-        model.addAttribute("userNameNotUnique", userNameNotUnique);
-        model.addAttribute("passwordNotTheSame", passwordNotTheSame);
         model.addAttribute("userInformationForm", userInformationForm);
 
         return "/user/createUser";
