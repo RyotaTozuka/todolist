@@ -1,6 +1,5 @@
 package com.todolist.form;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**

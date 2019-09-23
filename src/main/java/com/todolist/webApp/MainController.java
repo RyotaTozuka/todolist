@@ -157,7 +157,6 @@ public class MainController {
      */
     @RequestMapping(value = "/main/editTodoList", params = "toProcessing")
     String processingTodoList(@RequestParam() Integer listId) {
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         todoListService.updateByListIdAndCompleteFlag(listId, false);
 
         return "redirect:/main/complete";

@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.User;
  */
 class SecureUserDetails extends User {
 
-    private UserInformation userInformation;
-
     SecureUserDetails(UserInformation userInformation) {
         super(
                 userInformation.getUserName(),

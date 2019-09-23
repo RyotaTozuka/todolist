@@ -28,7 +28,7 @@ public class AdminController {
     private UserInformationService userInformationService;
 
     @Autowired
-    SecureUserDetailsService secureUserDetailsService;
+    private SecureUserDetailsService secureUserDetailsService;
 
     @Autowired
     private TodoListService todoListService;
