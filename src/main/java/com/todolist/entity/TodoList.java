@@ -16,9 +16,9 @@ public class TodoList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer listId;
     private Integer userId;
-    private String listContents;
-    private String listLimit;
-    private boolean listCompleteFlag;
+    private String contents;
+    private String due;
+    private boolean isComplete;
 
     public Integer getListId() {
         return listId;
@@ -36,27 +36,27 @@ public class TodoList {
         this.userId = userId;
     }
 
-    public String getListContents() {
-        return listContents;
+    public String getContents() {
+        return contents;
     }
 
-    public void setListContents(String listContents) {
-        this.listContents = listContents;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
-    public String getListLimit() {
-        return listLimit;
+    public String getDue() {
+        return due;
     }
 
-    public void setListLimit(String listLimit) {
-        this.listLimit = listLimit;
+    public void setDue(String due) {
+        this.due = due;
     }
 
-    public boolean isListCompleteFlag() {
-        return listCompleteFlag;
+    public boolean isComplete() {
+        return isComplete;
     }
 
-    public void setListCompleteFlag(boolean listCompleteFlag) {
-        this.listCompleteFlag = listCompleteFlag;
+    public void setIsComplete(boolean isComplete) {
+        this.isComplete = isComplete;
     }
 }

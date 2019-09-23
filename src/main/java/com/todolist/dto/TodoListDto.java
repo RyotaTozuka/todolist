@@ -13,8 +13,8 @@ import org.seasar.doma.Id;
 @Entity
 public class TodoListDto {
     @Id private Integer listId;
-    private String listContents;
-    private String listLimit;
+    private String contents;
+    private String due;
 
     public Integer getListId() {
         return listId;
@@ -24,19 +24,19 @@ public class TodoListDto {
         this.listId = listId;
     }
 
-    public String getListContents() {
-        return listContents;
+    public String getContents() {
+        return contents;
     }
 
-    public void setListContents(String listContents) {
-        this.listContents = listContents;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
-    public String getListLimit() {
-        return listLimit;
+    public String getDue() {
+        return due;
     }
 
-    public void setListLimit(String listLimit) {
-        this.listLimit = listLimit;
+    public void setDue(String due) {
+        this.due = due;
     }
 }

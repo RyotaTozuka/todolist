@@ -93,7 +93,7 @@ public class TodoListService {
      */
     public int updateToCompleteByListId(Integer listId) {
         TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setListCompleteFlag(true);
+        todoList.setIsComplete(true);
 
         return todoListDao.update(todoList);
     }
@@ -107,7 +107,7 @@ public class TodoListService {
      */
     public int updateToProcessingByListId(Integer listId) {
         TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setListCompleteFlag(false);
+        todoList.setIsComplete(false);
 
         return todoListDao.update(todoList);
     }
@@ -118,13 +118,13 @@ public class TodoListService {
      *
      * @param listId リストId
      * @param contents リストの内容
-     * @param limit リストの実施期限
+     * @param due リストの実施期限
      * @return 更新完了件数（1ならば正常、0ならば異常）
      */
-    public int updateTodoList(Integer listId, String contents, String limit) {
+    public int updateTodoList(Integer listId, String contents, String due) {
         TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setListContents(contents);
-        todoList.setListLimit(limit);
+        todoList.setContents(contents);
+        todoList.setDue(due);
 
         return todoListDao.update(todoList);
     }

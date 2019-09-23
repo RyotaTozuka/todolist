@@ -19,17 +19,17 @@
             <input type="hidden" name="isCreate" th:value="${isCreate}">
             <input type="hidden" th:field="*{listId}">
             <br><br><br>
-            <div class="errMsg" th:if="${#fields.hasErrors('listContents')}" th:errors="*{listContents}"></div>
+            <div class="errMsg" th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}"></div>
             <table>
                 <tbody>
                 <tr align="left">
                     <th class="contents">内容</th>
-                    <th class="limit">期限</th>
+                    <th class="due">期限</th>
                     <th class="button-wide"></th>
                 </tr>
                 <tr>
-                    <td class="data"><input type="text" style="width:500px" th:field="*{listContents}" th:errorclass="fieldError"></td>
-                    <td class="data"><input type="date" th:field="*{listLimit}"></td>
+                    <td class="data"><input type="text" style="width:500px" th:field="*{contents}" th:errorclass="fieldError"></td>
+                    <td class="data"><input type="date" th:field="*{due}"></td>
                     <td>
                         <div th:if="${isCreate}">
                             <button class="todo-list" name="insert">新規登録</button>

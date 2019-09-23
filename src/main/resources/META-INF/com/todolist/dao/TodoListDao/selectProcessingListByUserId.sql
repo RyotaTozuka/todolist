@@ -1,4 +1,4 @@
-select list_id, list_contents, list_limit
+select list_id, contents, due
 from todo_list
 where user_id = /* userId */1
-and list_complete_flag = '0';
+and is_complete = '0';

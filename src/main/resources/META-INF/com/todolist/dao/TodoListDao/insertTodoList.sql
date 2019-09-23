@@ -1,6 +1,6 @@
-insert into todo_list (user_id, list_contents, list_limit, list_complete_flag)
+insert into todo_list (user_id, contents, due, is_complete)
 values (
     /* todoList.userId */'0',
-    /* todoList.listContents */'a',
-    /* todoList.listLimit */'a',
+    /* todoList.contents */'a',
+    /* todoList.due */'a',
     '0');

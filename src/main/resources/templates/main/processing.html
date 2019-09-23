@@ -32,14 +32,14 @@
                 <tbody>
                 <tr align="left">
                     <th class="contents">内容</th>
-                    <th class="limit">期限</th>
+                    <th class="due">期限</th>
                     <th class="button"></th>
                     <th class="button"></th>
                     <th class="button"></th>
                 </tr>
                 <tr th:each="todoList:${todoLists}" th:object="${todoList}">
-                    <td class="data" th:text="*{listContents}"></td>
-                    <td class="data" th:text="${#strings.isEmpty(todoList.listLimit) ? '期限なし' : todoList.listLimit}"></td>
+                    <td class="data" th:text="*{contents}"></td>
+                    <td class="data" th:text="${#strings.isEmpty(todoList.due) ? '期限なし' : todoList.due}"></td>
                     <td><button class="todo-list" name="completeId" th:value="*{listId}">完了</button></td>
                     <td><button class="todo-list" name="editId" th:value="*{listId}">編集</button></td>
                     <td><button class="todo-list" name="deleteId" th:value="*{listId}">削除</button></td>

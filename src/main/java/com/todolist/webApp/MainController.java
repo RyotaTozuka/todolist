@@ -122,8 +122,8 @@ public class MainController {
         TodoList todoList = new TodoList();
 
         todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
-        todoList.setListContents(form.getListContents());
-        todoList.setListLimit(form.getListLimit());
+        todoList.setContents(form.getContents());
+        todoList.setDue(form.getDue());
 
         todoListService.insertTodoList(todoList);
 
@@ -192,7 +192,7 @@ public class MainController {
             return "/main/editing";
         }
 
-        todoListService.updateTodoList(form.getListId(), form.getListContents(), form.getListLimit());
+        todoListService.updateTodoList(form.getListId(), form.getContents(), form.getDue());
 
         return "redirect:/main/processing";
     }

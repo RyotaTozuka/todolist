@@ -1,8 +1,5 @@
 package com.todolist.form;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -17,10 +14,10 @@ public class TodoListForm {
     private Integer listId;
 
     @Size(min = 1, max = 30)
-    private String listContents;
+    private String contents;
 
     @Size(max = 10)
-    private String listLimit;
+    private String due;
 
     public Integer getListId() {
         return listId;
@@ -30,19 +27,19 @@ public class TodoListForm {
         this.listId = listId;
     }
 
-    public String getListContents() {
-        return listContents;
+    public String getContents() {
+        return contents;
     }
 
-    public void setListContents(String listContents) {
-        this.listContents = listContents;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
-    public String getListLimit() {
-        return listLimit;
+    public String getDue() {
+        return due;
     }
 
-    public void setListLimit(String listLimit) {
-        this.listLimit = listLimit;
+    public void setDue(String due) {
+        this.due = due;
     }
 }
