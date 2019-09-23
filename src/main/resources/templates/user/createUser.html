@@ -30,9 +30,13 @@
             <input type="password" name="passwordSecond" placeholder="password (again)" required/><br><br>
             <div th:if="${userRole}">
                 <input type="checkbox" th:field="*{userRole}" value="ROLE_ADMIN">管理者権限
-            </div><br>
-            <button>ユーザ作成</button>
+                <br>
+            </div>
+            <button>ユーザ作成</button><br><br>  
         </form>
+    </div>
+    <div th:unless="${userRole}">
+        <a th:href="@{/login}">ログイン画面</a>に戻る
     </div>
 </div>
 </body>
