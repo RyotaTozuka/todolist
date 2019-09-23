@@ -54,7 +54,6 @@ public class AdminController {
     @RequestMapping("/admin/userList")
     public String userList(Model model) {
         controllerProcedure.addMastAttribute(model);
-
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         List<UserInformationForm> userInformationForms = userInformationService.selectUserAll();
 

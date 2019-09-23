@@ -34,8 +34,8 @@ public class UserInformationService {
      * @return List<UserInformationForm> の型で抽出、0件の場合は size=0 のListを返す
      */
     public List<UserInformationForm> selectUserAll() {
-        List<UserInformationForm> userInformationForms = new ArrayList<>();
         List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
+        List<UserInformationForm> userInformationForms = new ArrayList<>();
 
         //DtoクラスからFormクラスにデータを移し替える
         for (UserInformationDto userInformationDto : userInformationDtos) {
@@ -65,7 +65,7 @@ public class UserInformationService {
     /**
      * ユーザの権限情報を変更
      * ※権限の種類は、"ROLE_USER","ROLE_ADMIN"の二種類であるため
-     * "ROLE_USER"でなければ"ROLE_ADMIN"にする、という実装をしている。
+     * "ROLE_USER"でなければ"ROLE_ADMIN"であると考える、という実装をしている。
      *
      * @param userId 選択されたユーザId
      * @return 更新完了件数（1ならば正常、0ならば異常）
@@ -91,6 +91,7 @@ public class UserInformationService {
      * @return 挿入完了件数（1ならば正常、0ならば異常）
      */
     public int insertUserInformation(UserInformation userInformation) {
+        //パスワードは平文のままなので、エンコードする。
         userInformation.setUserPassword(encodePassword(userInformation.getUserPassword()));
         return userInformationDao.insertUserInformation(userInformation);
     }
@@ -108,6 +109,12 @@ public class UserInformationService {
         return userInformationDao.delete(userInformation);
     }
 
+    /**
+     * 入力されたユーザ名が、すでにDBに登録されているかチェックする
+     *
+     * @param userName ユーザ名
+     * @return true：入力されたユーザ名はDBにまだ登録されていない、false：すでに登録あり
+     */
     public boolean isUniqueUserName(String userName) {
         List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
 
