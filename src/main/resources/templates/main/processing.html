@@ -40,7 +40,7 @@
                 </tr>
                 <tr th:each="todoList:${todoLists}" th:object="${todoList}">
                     <td class="data" th:text="*{contents}"></td>
-                    <td class="data" th:text="${#strings.isEmpty(todoList.due) ? '期限なし' : todoList.due}"></td>
+                    <td class="data" th:text="${#strings.equals(todoList.due,'9999-12-31') ? '期限なし' : todoList.due}"></td>
                     <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?toComplete}">完了</button></td>
                     <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?edit}">編集</button></td>
                     <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?delete}">削除</button></td>

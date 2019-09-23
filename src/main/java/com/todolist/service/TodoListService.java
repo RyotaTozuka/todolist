@@ -20,6 +20,9 @@ import java.util.List;
 @Service
 public class TodoListService {
 
+    //期限なし定数：期限が空白の場合、9999-21-31を入れる
+    private static final String NO_LIMIT = "9999-12-31";
+
     @Autowired
     private TodoListDao todoListDao;
 
@@ -66,6 +69,7 @@ public class TodoListService {
      * @return 挿入成功件数
      */
     public int insertTodoList(TodoList todoList) {
+        todoList.setDue(setDueWithFiniteRange(todoList.getDue()));
         return todoListDao.insertTodoList(todoList);
     }
 
@@ -95,7 +99,7 @@ public class TodoListService {
     public int updateTodoList(Integer listId, String contents, String due) {
         TodoList todoList = todoListDao.selectByListId(listId);
         todoList.setContents(contents);
-        todoList.setDue(due);
+        todoList.setDue(setDueWithFiniteRange(due));
 
         return todoListDao.update(todoList);
     }
@@ -139,5 +143,13 @@ public class TodoListService {
         todoList.setUserId(userId);
 
         return todoListDao.deleteListByUserId(todoList);
+    }
+
+    //期限が指定なしの場合は、NO_LIMITを入れる
+    private String setDueWithFiniteRange(String due) {
+        if ("".matches(due)) {
+            due = NO_LIMIT;
+        }
+        return due;
     }
 }
