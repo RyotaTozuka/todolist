@@ -28,6 +28,7 @@
 
     <div th:if="${todoLists.size() != 0}">
         <form action="editTodoList" method="get">
+            <input type="hidden" name="status" value="processing">
             <table>
                 <tbody>
                 <tr align="left">

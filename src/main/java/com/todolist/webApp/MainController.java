@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -54,6 +53,7 @@ public class MainController {
         //未完了のTodoリストの取得
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
         model.addAttribute("todoLists", todoListForms);
+
         return "/main/processing";
     }
 
@@ -71,30 +71,96 @@ public class MainController {
         //完了したTodoリストの取得
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
         model.addAttribute("todoLists", todoListForms);
+
         return "/main/complete";
     }
 
     /**
      * Todoリストの編集画面に遷移する
      *
-     * @param isCreate true:新規登録、false:既存リストの編集（更新）
-     * @param listId TodoリストのId
      * @param model モデル
      * @return Todoリスト編集画面のアドレス
      */
     @RequestMapping("/main/editing")
-    String mainEditing(@RequestParam() boolean isCreate, @RequestParam(defaultValue = "0") Integer listId, Model model) {
+    String mainEditing(Model model) {
         controllerProcedure.addMastAttribute(model);
 
         TodoListForm todoListForm = new TodoListForm();
 
-        if (!isCreate) {
-            todoListForm = todoListService.getTodoListByListId(listId);
-        }
+        //新規作成なので、isCreateにtrueを格納
+        model.addAttribute("isCreate", true);
         model.addAttribute("todoListForm", todoListForm);
-        model.addAttribute("isCreate", isCreate);
 
         return "/main/editing";
+    }
+
+    /**
+     * 選択したTodoリストのステータスを完了にし、
+     * 未完了リスト画面に遷移する
+     *
+     * @param listId 完了にするリストのlistId
+     * @return 未完了リスト画面のアドレス
+     */
+    @RequestMapping(value = "/main/editTodoList", params = "completeId")
+    String completeTodoList(@RequestParam("completeId") Integer listId) {
+        todoListService.updateByListIdAndCompleteFlag(listId, true);
+
+        return "redirect:/main/processing";
+    }
+
+    /**
+     * 選択したTodoリストを編集するために、対象のlistIdの情報を保持したまま
+     * リスト編集画面に遷移する
+     *
+     * @param listId 編集対象のlistId
+     * @return リスト編集画面のアドレス
+     */
+    @RequestMapping(value = "/main/editTodoList", params = "editId")
+    String editTodoList(@RequestParam("editId") Integer listId, Model model) {
+
+        TodoListForm todoListForm = todoListService.getTodoListByListId(listId);
+
+        //新規登録ではないので、isCreateにfalseを格納
+        model.addAttribute("isCreate", false);
+        model.addAttribute("todoListForm", todoListForm);
+
+        return "/main/editing";
+    }
+
+    /**
+     * 選択されたTodoリストを削除し、
+     * 削除実行前の画面に遷移する
+     *
+     * @param listId 削除対象のlistId
+     * @param status 遷移前画面の識別子
+     * @return 削除実行前の画面
+     */
+    @RequestMapping(value = "/main/editTodoList", params = "deleteId")
+    String deleteTodoList(@RequestParam("deleteId") Integer listId, @RequestParam("status") String status) {
+        todoListService.deleteListByListId(listId);
+
+        //完了リスト画面からの遷移の場合、statusに"complete"が入っている
+        //それ以外は、未完了リストから遷移したとみなす
+        if (("complete").matches(status)) {
+            return "redirect:/main/complete";
+        } else {
+            return "redirect:/main/processing";
+        }
+    }
+
+    /**
+     * 選択したTodoリストのステータスを未完了にし、
+     * 完了リスト画面に遷移する
+     *
+     * @param listId 未完了にするリストのlistId
+     * @return 完了リスト画面のアドレス
+     */
+    @RequestMapping(value = "/main/editTodoList", params = "processingId")
+    String processingTodoList(@RequestParam("processingId") Integer listId) {
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        todoListService.updateByListIdAndCompleteFlag(listId, false);
+
+        return "redirect:/main/complete";
     }
 
     /**
@@ -109,70 +175,25 @@ public class MainController {
     @RequestMapping(value = "/main/editTodoList", params = "insert")
     String insertTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form,
                           BindingResult result,
-                          @RequestParam("isCreate") boolean isCreate,
+                          @ModelAttribute("isCreate") boolean isCreate,
                           Model model) {
         controllerProcedure.addMastAttribute(model);
 
         if (result.hasErrors()) {
-            model.addAttribute("isCreate", isCreate);
-            model.addAttribute("todoListForm", form);
             return "/main/editing";
         }
 
+        //todoリストの新規作成
         TodoList todoList = new TodoList();
 
         todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
         todoList.setContents(form.getContents());
         todoList.setDue(form.getDue());
+        todoList.setIsComplete(false);
 
         todoListService.insertTodoList(todoList);
 
         return "redirect:/main/processing";
-    }
-
-    /**
-     * 選択したTodoリストのステータスを完了にし、
-     * 未完了リスト画面に遷移する
-     *
-     * @param completeId 完了にするリストのlistId
-     * @return 未完了リスト画面のアドレス
-     */
-    @RequestMapping(value = "/main/editTodoList", params = "completeId")
-    String completeTodoList(@RequestParam() Integer completeId) {
-        todoListService.updateToCompleteByListId(completeId);
-
-        return "redirect:/main/processing";
-    }
-
-    /**
-     * 選択したTodoリストのステータスを未完了にし、
-     * 完了リスト画面に遷移する
-     *
-     * @param processingId 未完了にするリストのlistId
-     * @return 完了リスト画面のアドレス
-     */
-    @RequestMapping(value = "/main/editTodoList", params = "processingId")
-    String processingTodoList(@RequestParam() Integer processingId) {
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
-        todoListService.updateToProcessingByListId(processingId);
-
-        return "redirect:/main/complete";
-    }
-
-    /**
-     * 選択したTodoリストを編集するために、対象のlistIdの情報を保持したまま
-     * リスト編集画面に遷移する
-     *
-     * @param editId 編集対象のlistId
-     * @param redirectAttribute listIdを格納
-     * @return リスト編集画面のアドレス
-     */
-    @RequestMapping(value = "/main/editTodoList", params = "editId")
-    String editTodoList(@RequestParam() Integer editId, RedirectAttributes redirectAttribute) {
-        redirectAttribute.addAttribute("isCreate", false);
-        redirectAttribute.addAttribute("listId", editId);
-
-        return "redirect:/main/editing";
     }
 
     /**
@@ -185,37 +206,19 @@ public class MainController {
      * @return 未完了リスト画面のアドレス
      */
     @RequestMapping(value = "/main/editTodoList", params = "update")
-    String editTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form, BindingResult result, Model model) {
+    String editTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form,
+                        BindingResult result,
+                        @ModelAttribute("isCreate") boolean isCreate,
+                        Model model) {
+        controllerProcedure.addMastAttribute(model);
+
         if (result.hasErrors()) {
-            controllerProcedure.addMastAttribute(model);
-            model.addAttribute("todoListForm", form);
             return "/main/editing";
         }
 
         todoListService.updateTodoList(form.getListId(), form.getContents(), form.getDue());
 
         return "redirect:/main/processing";
-    }
-
-    /**
-     * 選択されたTodoリストを削除し、
-     * 削除実行前の画面に遷移する
-     *
-     * @param deleteId 削除対象のlistId
-     * @param status 遷移前画面の識別子
-     * @return 削除実行前の画面
-     */
-    @RequestMapping(value = "/main/editTodoList", params = "deleteId")
-    String deleteTodoList(@RequestParam() Integer deleteId, @RequestParam(defaultValue = "NO_STATE") String status) {
-        todoListService.deleteListByListId(deleteId);
-
-        /*完了リスト画面からの遷移の場合、statusに"complete"が入っている
-        それ以外は、未完了リストから遷移したとみなす */
-        if (("complete").matches(status)) {
-            return "redirect:/main/complete";
-        } else {
-            return "redirect:/main/processing";
-        }
     }
 
     /**

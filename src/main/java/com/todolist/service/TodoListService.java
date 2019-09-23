@@ -71,28 +71,15 @@ public class TodoListService {
 
     /**
      * 入力されたlistIdに紐づくレコードの
-     * ステータス（ListCompleteFlag）を未完了（false）から完了（true）にする
+     * ステータス（ListCompleteFlag）を入力されたものに変更する
      *
      * @param listId リストId
+     * @param isComplete true：完了済み。false：未完了
      * @return 更新完了件数（1ならば正常、0ならば異常）
      */
-    public int updateToCompleteByListId(Integer listId) {
+    public int updateByListIdAndCompleteFlag(Integer listId, boolean isComplete) {
         TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setIsComplete(true);
-
-        return todoListDao.update(todoList);
-    }
-
-    /**
-     * 入力されたlistIdに紐づくレコードの
-     * ステータス（ListCompleteFlag）を完了（true）から未完了（false）にする
-     *
-     * @param listId リストId
-     * @return 更新完了件数（1ならば正常、0ならば異常）
-     */
-    public int updateToProcessingByListId(Integer listId) {
-        TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setIsComplete(false);
+        todoList.setIsComplete(isComplete);
 
         return todoListDao.update(todoList);
     }
