@@ -101,8 +101,8 @@ public class MainController {
      * @param listId 完了にするリストのlistId
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "completeId")
-    String completeTodoList(@RequestParam("completeId") Integer listId) {
+    @RequestMapping(value = "/main/editTodoList", params = "toComplete")
+    String completeTodoList(@RequestParam() Integer listId) {
         todoListService.updateByListIdAndCompleteFlag(listId, true);
 
         return "redirect:/main/processing";
@@ -115,8 +115,8 @@ public class MainController {
      * @param listId 編集対象のlistId
      * @return リスト編集画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "editId")
-    String editTodoList(@RequestParam("editId") Integer listId, Model model) {
+    @RequestMapping(value = "/main/editTodoList", params = "edit")
+    String editTodoList(@RequestParam() Integer listId, Model model) {
 
         TodoListForm todoListForm = todoListService.getTodoListByListId(listId);
 
@@ -135,8 +135,8 @@ public class MainController {
      * @param status 遷移前画面の識別子
      * @return 削除実行前の画面
      */
-    @RequestMapping(value = "/main/editTodoList", params = "deleteId")
-    String deleteTodoList(@RequestParam("deleteId") Integer listId, @RequestParam("status") String status) {
+    @RequestMapping(value = "/main/editTodoList", params = "delete")
+    String deleteTodoList(@RequestParam() Integer listId, @RequestParam() String status) {
         todoListService.deleteListByListId(listId);
 
         //完了リスト画面からの遷移の場合、statusに"complete"が入っている
@@ -155,8 +155,8 @@ public class MainController {
      * @param listId 未完了にするリストのlistId
      * @return 完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "processingId")
-    String processingTodoList(@RequestParam("processingId") Integer listId) {
+    @RequestMapping(value = "/main/editTodoList", params = "toProcessing")
+    String processingTodoList(@RequestParam() Integer listId) {
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
         todoListService.updateByListIdAndCompleteFlag(listId, false);
 

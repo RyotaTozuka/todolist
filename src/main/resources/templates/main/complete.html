@@ -18,7 +18,7 @@
     </div>
 
     <div th:if="${todoLists.size() != 0}">
-        <form method="get" th:action="@{/main/editTodoList}" >
+        <form method="post" th:action="@{/main/editTodoList}">
             <input type="hidden" name="status" value="complete">
             <br><br><br>
             <table>
@@ -32,14 +32,14 @@
                 <tr th:each="todoList:${todoLists}">
                     <td class="data" th:text="${todoList.contents}"></td>
                     <td class="data" th:text="${#strings.isEmpty(todoList.due) ? '期限なし' : todoList.due}"></td>
-                    <td><button class="todo-list" name="processingId" th:value="${todoList.listId}">未完了にする</button></td>
-                    <td><button class="todo-list" name="deleteId" th:value="${todoList.listId}">削除</button></td>
+                    <td><button class="todo-list" name="listId" th:value="${todoList.listId}" th:formaction="@{/main/editTodoList?toProcessing}">未完了にする</button></td>
+                    <td><button class="todo-list" name="listId" th:value="${todoList.listId}" th:formaction="@{/main/editTodoList?delete}">削除</button></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><button class="todo-list" name="deleteCompleteAll">すべて削除</button></td>
+                    <td><button class="todo-list" th:formaction="@{/main/editTodoList?deleteCompleteAll}">すべて削除</button></td>
                 </tr>
                 </tbody>
             </table>

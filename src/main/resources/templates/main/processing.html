@@ -27,7 +27,7 @@
     </div>
 
     <div th:if="${todoLists.size() != 0}">
-        <form action="editTodoList" method="get">
+        <form th:method="post" th:action="@{/main/editTodoList}">
             <input type="hidden" name="status" value="processing">
             <table>
                 <tbody>
@@ -41,9 +41,9 @@
                 <tr th:each="todoList:${todoLists}" th:object="${todoList}">
                     <td class="data" th:text="*{contents}"></td>
                     <td class="data" th:text="${#strings.isEmpty(todoList.due) ? '期限なし' : todoList.due}"></td>
-                    <td><button class="todo-list" name="completeId" th:value="*{listId}">完了</button></td>
-                    <td><button class="todo-list" name="editId" th:value="*{listId}">編集</button></td>
-                    <td><button class="todo-list" name="deleteId" th:value="*{listId}">削除</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?toComplete}">完了</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?edit}">編集</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?delete}">削除</button></td>
                 </tr>
                 </tbody>
             </table>

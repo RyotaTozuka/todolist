@@ -15,7 +15,7 @@
     </div>
 
     <div>
-        <form method="get" th:action="@{/main/editTodoList}" th:object="${todoListForm}">
+        <form method="post" th:action="@{/main/editTodoList}" th:object="${todoListForm}">
             <input type="hidden" name="isCreate" th:value="${isCreate}">
             <input type="hidden" th:field="*{listId}">
             <br><br><br>
