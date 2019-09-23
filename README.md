@@ -4,14 +4,14 @@ web上で利用するtodoリストのアプリケーション
 
 
 ### 環境
-DB：デフォルトでは、postgreSQL（version 11.5）を想定  
-※実行するには、postgreSQL内に「todolist」というDATABASEを作成する必要あり  
-
 * 言語：java
 * FW：spring boot
 * build tool：maven
 * ORマッパー：doma
 * htmlテンプレート：thymeleaf
+* DB：デフォルトでは、postgreSQL（version 11.5）を想定  
+※実行するには、postgreSQL内に「todolist」というDATABASEを作成する必要あり  
+
 
 ### あらかじめ登録されているユーザ
 * username：Tozuka, password：pass, 権限：管理者
