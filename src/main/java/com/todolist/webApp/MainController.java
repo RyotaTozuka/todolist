@@ -117,6 +117,7 @@ public class MainController {
      */
     @RequestMapping(value = "/main/editTodoList", params = "edit")
     String editTodoList(@RequestParam() Integer listId, Model model) {
+        controllerProcedure.addMastAttribute(model);
 
         TodoListForm todoListForm = todoListService.getTodoListByListId(listId);
 
