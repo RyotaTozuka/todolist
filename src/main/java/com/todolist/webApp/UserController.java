@@ -46,10 +46,10 @@ public class UserController {
      * @param model モデル
      * @return パスワード変更画面のアドレス
      */
-    @RequestMapping("/user/changePassword")
+    @RequestMapping("user/changePassword")
     public String changePassword(Model model) {
         controllerProcedure.addMastAttribute(model);
-        return "/user/changePassword";
+        return "user/changePassword";
     }
 
     /**
@@ -61,7 +61,7 @@ public class UserController {
      * @param model モデル
      * @return 未完了リスト画面のアドレス　※精査エラーの場合はパスワード変更画面のアドレス
      */
-    @RequestMapping(value="/user/updatePassword", method= RequestMethod.POST)
+    @RequestMapping(value="user/updatePassword", method= RequestMethod.POST)
     public String updatePassword(
             @RequestParam() String oldPassword,
             @RequestParam() String newPasswordFirst,
@@ -72,13 +72,13 @@ public class UserController {
         //旧パスワードが違う場合はパスワード変更画面に戻る
         if (!secureUserDetailsService.checkPasswordIsValidated(oldPassword)) {
             model.addAttribute("oldPasswordMissMatch", true);
-            return "/user/changePassword";
+            return "user/changePassword";
         }
 
         //新パスワードの一回目と二回目の入力値が異なる場合はパスワード変更画面に戻る
         if (!newPasswordFirst.equals(newPasswordSecond)) {
             model.addAttribute("newPasswordMissMatch", true);
-            return "/user/changePassword";
+            return "user/changePassword";
         }
 
         userInformationService.updateUserPassword(newPasswordFirst);
@@ -92,7 +92,7 @@ public class UserController {
      * @param model モデル
      * @return ユーザ新規作成画面のアドレス
      */
-    @RequestMapping("/user/createUser")
+    @RequestMapping("user/createUser")
     public String createUser(Model model) {
 
         controllerProcedure.addMastAttribute(model);
@@ -100,7 +100,7 @@ public class UserController {
 
         model.addAttribute("userInformationForm", userInformationForm);
 
-        return "/user/createUser";
+        return "user/createUser";
     }
 
     /**
@@ -114,7 +114,7 @@ public class UserController {
      * @param model モデル
      * @return 一般ユーザ：login画面、管理者：管理者メニュー
      */
-    @RequestMapping(value="/user/insertUser", method=RequestMethod.POST)
+    @RequestMapping(value="user/insertUser", method=RequestMethod.POST)
     public String insertUser(
             @RequestParam() String passwordFirst,
             @RequestParam() String passwordSecond,
@@ -125,19 +125,19 @@ public class UserController {
         controllerProcedure.addMastAttribute(model);
 
         if (result.hasErrors()) {
-            return "/user/createUser";
+            return "user/createUser";
         }
 
         //userName uniqueチェック
         if (!userInformationService.isUniqueUserName(form.getUserName())) {
             model.addAttribute("userNameNotUnique",true);
-            return "/user/createUser";
+            return "user/createUser";
         }
 
         //新パスワードの一回目と二回目の入力値が異なる場合はパスワード変更画面に戻る
         if (!passwordFirst.matches(passwordSecond)) {
             model.addAttribute("passwordNotTheSame", true);
-            return "/user/createUser";
+            return "user/createUser";
         }
 
         UserInformation userInformation = new UserInformation();

@@ -45,7 +45,7 @@ public class MainController {
      * @param model モデル
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping("/main/processing")
+    @RequestMapping("main/processing")
     String mainProcessing(Model model) {
         controllerProcedure.addMastAttribute(model);
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
@@ -54,7 +54,7 @@ public class MainController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
         model.addAttribute("todoLists", todoListForms);
 
-        return "/main/processing";
+        return "main/processing";
     }
 
     /**
@@ -63,7 +63,7 @@ public class MainController {
      * @param model モデル
      * @return 完了リスト画面のアドレス
      */
-    @RequestMapping("/main/complete")
+    @RequestMapping("main/complete")
     String mainComplete(Model model) {
         controllerProcedure.addMastAttribute(model);
         UserInformation userInformation = secureUserDetailsService.getUserInformation();
@@ -72,7 +72,7 @@ public class MainController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
         model.addAttribute("todoLists", todoListForms);
 
-        return "/main/complete";
+        return "main/complete";
     }
 
     /**
@@ -81,7 +81,7 @@ public class MainController {
      * @param model モデル
      * @return Todoリスト編集画面のアドレス
      */
-    @RequestMapping("/main/editing")
+    @RequestMapping("main/editing")
     String mainEditing(Model model) {
         controllerProcedure.addMastAttribute(model);
 
@@ -91,7 +91,7 @@ public class MainController {
         model.addAttribute("isCreate", true);
         model.addAttribute("todoListForm", todoListForm);
 
-        return "/main/editing";
+        return "main/editing";
     }
 
     /**
@@ -101,7 +101,7 @@ public class MainController {
      * @param listId 完了にするリストのlistId
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "toComplete")
+    @RequestMapping(value = "main/editTodoList", params = "toComplete")
     String completeTodoList(@RequestParam() Integer listId) {
         todoListService.updateByListIdAndCompleteFlag(listId, true);
 
@@ -115,7 +115,7 @@ public class MainController {
      * @param listId 編集対象のlistId
      * @return リスト編集画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "edit")
+    @RequestMapping(value = "main/editTodoList", params = "edit")
     String editTodoList(@RequestParam() Integer listId, Model model) {
         controllerProcedure.addMastAttribute(model);
 
@@ -125,7 +125,7 @@ public class MainController {
         model.addAttribute("isCreate", false);
         model.addAttribute("todoListForm", todoListForm);
 
-        return "/main/editing";
+        return "main/editing";
     }
 
     /**
@@ -136,7 +136,7 @@ public class MainController {
      * @param status 遷移前画面の識別子
      * @return 削除実行前の画面
      */
-    @RequestMapping(value = "/main/editTodoList", params = "delete")
+    @RequestMapping(value = "main/editTodoList", params = "delete")
     String deleteTodoList(@RequestParam() Integer listId, @RequestParam() String status) {
         todoListService.deleteListByListId(listId);
 
@@ -156,7 +156,7 @@ public class MainController {
      * @param listId 未完了にするリストのlistId
      * @return 完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "toProcessing")
+    @RequestMapping(value = "main/editTodoList", params = "toProcessing")
     String processingTodoList(@RequestParam() Integer listId) {
         todoListService.updateByListIdAndCompleteFlag(listId, false);
 
@@ -172,7 +172,7 @@ public class MainController {
      * @param model モデル
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "insert")
+    @RequestMapping(value = "main/editTodoList", params = "insert")
     String insertTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form,
                           BindingResult result,
                           @ModelAttribute("isCreate") boolean isCreate,
@@ -180,7 +180,7 @@ public class MainController {
         controllerProcedure.addMastAttribute(model);
 
         if (result.hasErrors()) {
-            return "/main/editing";
+            return "main/editing";
         }
 
         //todoリストの新規作成
@@ -205,7 +205,7 @@ public class MainController {
      * @param model モデル
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "update")
+    @RequestMapping(value = "main/editTodoList", params = "update")
     String editTodoList(@ModelAttribute("todoListForm") @Valid TodoListForm form,
                         BindingResult result,
                         @ModelAttribute("isCreate") boolean isCreate,
@@ -213,7 +213,7 @@ public class MainController {
         controllerProcedure.addMastAttribute(model);
 
         if (result.hasErrors()) {
-            return "/main/editing";
+            return "main/editing";
         }
 
         todoListService.updateTodoList(form.getListId(), form.getContents(), form.getDue());
@@ -227,7 +227,7 @@ public class MainController {
      *
      * @return 未完了リスト画面のアドレス
      */
-    @RequestMapping(value = "/main/editTodoList", params = "deleteCompleteAll")
+    @RequestMapping(value = "main/editTodoList", params = "deleteCompleteAll")
     String deleteAllCompleteList() {
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
 

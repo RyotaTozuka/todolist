@@ -39,10 +39,10 @@ public class AdminController {
      * @param model モデル
      * @return 管理者メニュー画面のアドレス
      */
-    @RequestMapping("/admin/main")
+    @RequestMapping("admin/main")
     public String mainAdmin(Model model) {
         controllerProcedure.addMastAttribute(model);
-        return "/admin/main";
+        return "admin/main";
     }
 
     /**
@@ -51,7 +51,7 @@ public class AdminController {
      * @param model モデル
      * @return ユーザ情報一覧画面のアドレス
      */
-    @RequestMapping("/admin/userList")
+    @RequestMapping("admin/userList")
     public String userList(Model model) {
         controllerProcedure.addMastAttribute(model);
         Integer userId = secureUserDetailsService.getUserInformation().getUserId();
@@ -60,7 +60,7 @@ public class AdminController {
         model.addAttribute("userLists", userInformationForms);
         model.addAttribute("userId", userId);
 
-        return "/admin/userList";
+        return "admin/userList";
     }
 
     /**
@@ -70,7 +70,7 @@ public class AdminController {
      * @param changeRoleId 権限情報を更新する対象のuserId
      * @return ユーザ情報一覧画面のアドレス
      */
-    @RequestMapping(value="/admin/editUserList", params="changeRoleId")
+    @RequestMapping(value="admin/editUserList", params="changeRoleId")
     public String changeRole(@RequestParam() Integer changeRoleId) {
         userInformationService.flipUserRoleByUserId(changeRoleId);
 
@@ -84,7 +84,7 @@ public class AdminController {
      * @param deleteId 削除対象のuserId
      * @return ユーザ情報一覧画面のアドレス
      */
-    @RequestMapping(value="/admin/editUserList", params="deleteId")
+    @RequestMapping(value="admin/editUserList", params="deleteId")
     public String deleteUser(@RequestParam() Integer deleteId) {
         //削除対象のユーザに紐づくtodoリストの内容も削除する
         todoListService.deleteListByUserId(deleteId);
