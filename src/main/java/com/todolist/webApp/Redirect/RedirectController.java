@@ -57,7 +57,7 @@ public class RedirectController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
         model.addAttribute("todoLists", todoListForms);
 
-        return "main/processing";
+        return "list/todoList";
     }
 
     /**
@@ -75,7 +75,7 @@ public class RedirectController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
         model.addAttribute("todoLists", todoListForms);
 
-        return "main/complete";
+        return "list/doneList";
     }
 
     /**

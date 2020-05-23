@@ -118,7 +118,7 @@ public class TodoListService {
     }
 
     /**
-     * 入力されたuserIdに紐づく、ステータス：完了のレコードを全権削除
+     * 入力されたuserIdに紐づく、ステータス：完了のレコードを全件削除
      *  (ListCompleteFlag = true: 完了、 false: 未完了)
      *
      * @param userId ログイン中のユーザId

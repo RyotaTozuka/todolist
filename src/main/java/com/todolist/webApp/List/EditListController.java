@@ -53,7 +53,7 @@ public class EditListController {
         controllerProcedure.addMastAttribute(model);
 
         if (result.hasErrors()) {
-            return "main/editing";
+            return "list/editList";
         }
         //todo:insert or updateの処理検討
         if (isCreate) {

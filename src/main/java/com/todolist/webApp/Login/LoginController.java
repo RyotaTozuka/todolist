@@ -57,6 +57,6 @@ public class LoginController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
         model.addAttribute("todoLists", todoListForms);
 
-        return "main/processing";
+        return "list/todoList";
     }
 }

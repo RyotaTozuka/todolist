@@ -52,7 +52,7 @@ public class TodoListController {
         List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
         model.addAttribute("todoLists", todoListForms);
 
-        return "main/complete";
+        return "list/doneList";
     }
 
     /**
@@ -71,7 +71,7 @@ public class TodoListController {
         model.addAttribute("isCreate", true);
         model.addAttribute("todoListForm", todoListForm);
 
-        return "main/editing";
+        return "list/editList";
     }
 
     /**
@@ -103,7 +103,7 @@ public class TodoListController {
         model.addAttribute("isCreate", false);
         model.addAttribute("todoListForm", todoListForm);
 
-        return "main/editing";
+        return "list/editList";
     }
 
     /**
