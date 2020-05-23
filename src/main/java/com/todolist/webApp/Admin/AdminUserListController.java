@@ -1,16 +1,11 @@
-package com.todolist.webApp;
+package com.todolist.webApp.Admin;
 
-import com.todolist.form.UserInformationForm;
-import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
 import com.todolist.service.UserInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * @author Ryota Tozuka
@@ -19,49 +14,13 @@ import java.util.List;
  * 管理者画面のControllerクラス
  */
 @Controller
-public class AdminController {
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
+public class AdminUserListController {
 
     @Autowired
     private UserInformationService userInformationService;
 
     @Autowired
-    private SecureUserDetailsService secureUserDetailsService;
-
-    @Autowired
     private TodoListService todoListService;
-
-    /**
-     * 管理者メニュー画面へ遷移する
-     *
-     * @param model モデル
-     * @return 管理者メニュー画面のアドレス
-     */
-    @RequestMapping("admin/main")
-    public String mainAdmin(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        return "admin/main";
-    }
-
-    /**
-     * ユーザ情報一覧画面へ遷移する
-     *
-     * @param model モデル
-     * @return ユーザ情報一覧画面のアドレス
-     */
-    @RequestMapping("admin/userList")
-    public String userList(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
-        List<UserInformationForm> userInformationForms = userInformationService.selectUserAll();
-
-        model.addAttribute("userLists", userInformationForms);
-        model.addAttribute("userId", userId);
-
-        return "admin/userList";
-    }
 
     /**
      * ユーザ情報一覧画面にて選択されたユーザの管理者権限を変更し
@@ -70,7 +29,7 @@ public class AdminController {
      * @param changeRoleId 権限情報を更新する対象のuserId
      * @return ユーザ情報一覧画面のアドレス
      */
-    @RequestMapping(value="admin/editUserList", params="changeRoleId")
+    @RequestMapping(value="admin/userList/editUserList", params="changeRoleId")
     public String changeRole(@RequestParam() Integer changeRoleId) {
         userInformationService.flipUserRoleByUserId(changeRoleId);
 
@@ -84,7 +43,7 @@ public class AdminController {
      * @param deleteId 削除対象のuserId
      * @return ユーザ情報一覧画面のアドレス
      */
-    @RequestMapping(value="admin/editUserList", params="deleteId")
+    @RequestMapping(value="admin//userList/editUserList", params="deleteId")
     public String deleteUser(@RequestParam() Integer deleteId) {
         //削除対象のユーザに紐づくtodoリストの内容も削除する
         todoListService.deleteListByUserId(deleteId);

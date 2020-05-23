@@ -16,7 +16,7 @@
         </p>
     </div>
     <div>
-        <form method="post" th:action="@{/user/insertUser}" th:object="${userInformationForm}">
+        <form method="post" th:action="@{/user/createUser/create}" th:object="${userInformationForm}">
             <input type="hidden" th:field="*{userId}">
 
             <div class="errMsg" th:if="${userNameNotUnique}">usernameがすでに登録されています。</div>

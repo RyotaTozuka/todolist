@@ -14,7 +14,7 @@
         <h1>リスト一覧</h1>
     </div>
 
-    <form method="get" th:action="@{/main/editing}">
+    <form method="get" th:action="@{/list/todoList/create}">
         <br>
         <div>
             <button class="todo-list" name="isCreate" value="true">新規登録</button>
@@ -27,7 +27,7 @@
     </div>
 
     <div th:if="${todoLists.size() != 0}">
-        <form th:method="post" th:action="@{/main/editTodoList}">
+        <form th:method="get">
             <input type="hidden" name="status" value="processing">
             <table>
                 <tbody>
@@ -41,16 +41,16 @@
                 <tr th:each="todoList:${todoLists}" th:object="${todoList}">
                     <td class="data" th:text="*{contents}"></td>
                     <td class="data" th:text="${#strings.equals(todoList.due,'9999-12-31') ? '期限なし' : todoList.due}"></td>
-                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?toComplete}">完了</button></td>
-                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?edit}">編集</button></td>
-                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/main/editTodoList?delete}">削除</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/list/todoList/done}">完了</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/list/todoList/edit}">編集</button></td>
+                    <td><button class="todo-list" name="listId" th:value="*{listId}" th:formaction="@{/list/todoList/delete}">削除</button></td>
                 </tr>
                 </tbody>
             </table>
         </form>
     </div>
     <div>
-        <a th:href="@{/main/complete}">完了したものを表示</a>
+        <a th:href="@{/list/todoList/doneList}">完了したものを表示</a>
     </div>
 </div>
 </body>
