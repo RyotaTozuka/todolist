@@ -1,13 +1,11 @@
-package com.todolist.Util;
+package com.todolist.Util.ControllerUtil;
 
 import com.todolist.entity.TodoList;
 import com.todolist.entity.UserInformation;
 import com.todolist.form.TodoListForm;
-import com.todolist.security.SecureUserDetailsService;
+import com.todolist.form.UserInformationForm;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,28 +18,44 @@ import java.util.List;
  */
 @Component
 public class CopyEntityToFormUtil {
-    //権限情報の定義：thymeleafで扱いやすくするため、true/falseに変換
-    private static final boolean ROLE_ADMIN = true;
-    private static final boolean ROLE_USER = false;
-
-    @Autowired
-    private SecureUserDetailsService secureUserDetailsService;
 
     /**
      * todoListリスト⇒todoListFormリスト
      *
-     * @param todoLists　todoListリスト
+     * @param todoListList　todoListリスト
      * @return todoListFormリスト
      */
-    public List<TodoListForm> copyTodoListsToTodoListForms(List<TodoList> todoLists) {
-        List<TodoListForm> todoListForms = new ArrayList<>();
+    public List<TodoListForm> copyTodoListListToTodoListFormList(List<TodoList> todoListList) {
+        List<TodoListForm> todoListFormList = new ArrayList<>();
 
-        for (TodoList todoList : todoLists) {
-            TodoListForm todoListForm = new TodoListForm();
-            BeanUtils.copyProperties(todoList, todoListForm);
-            todoListForms.add(todoListForm);
+        for (TodoList todoList : todoListList) {
+            TodoListForm todoListForm = copyTodoListToTodoListForm(todoList);
+            todoListFormList.add(todoListForm);
         }
 
-        return todoListForms;
+        return todoListFormList;
+    }
+
+    public List<UserInformationForm> copyUserInformationListToUserInformationFormList(List<UserInformation> userInformationList) {
+        List<UserInformationForm> userInformationFormList = new ArrayList<>();
+
+        for (UserInformation userInformation : userInformationList) {
+            UserInformationForm userInformationForm = copyUserInformationToUserInformationForm(userInformation);
+            userInformationFormList.add(userInformationForm);
+        }
+
+        return userInformationFormList;
+    }
+
+    public UserInformationForm copyUserInformationToUserInformationForm(UserInformation userInformation) {
+        UserInformationForm userInformationForm = new UserInformationForm();
+        BeanUtils.copyProperties(userInformation,userInformationForm);
+        return userInformationForm;
+    }
+
+    public TodoListForm copyTodoListToTodoListForm(TodoList todoList) {
+        TodoListForm todoListForm = new TodoListForm();
+        BeanUtils.copyProperties(todoList,todoListForm);
+        return todoListForm;
     }
 }

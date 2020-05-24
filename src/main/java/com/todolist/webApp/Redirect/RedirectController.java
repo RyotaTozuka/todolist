@@ -1,18 +1,17 @@
 package com.todolist.webApp.Redirect;
 
-import com.todolist.entity.UserInformation;
+import com.todolist.Util.ControllerUtil.CopyEntityToFormUtil;
 import com.todolist.form.TodoListForm;
 import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
 import com.todolist.service.UserInformationService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,13 +25,16 @@ import java.util.List;
 public class RedirectController {
 
     @Autowired
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyEntityToFormUtil copyEntityToFormUtil;
+
+    @Autowired
     private TodoListService todoListService;
 
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
 
     @Autowired
     private UserInformationService userInformationService;
@@ -50,11 +52,11 @@ public class RedirectController {
      */
     @RequestMapping("list/todoList")
     String todoList(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        addParamUtil.addMastAttribute(model);
 
-        //未完了のTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
+         //未完了のTodoリストの取得
+        List<TodoListForm> todoListForms = copyEntityToFormUtil.copyTodoListListToTodoListFormList(
+                todoListService.getTodoListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), false));
         model.addAttribute("todoLists", todoListForms);
 
         return "list/todoList";
@@ -68,12 +70,12 @@ public class RedirectController {
      */
     @RequestMapping("list/doneList")
     String mainComplete(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        addParamUtil.addMastAttribute(model);
 
         //完了したTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
-        model.addAttribute("todoLists", todoListForms);
+        List<TodoListForm> todoListFormList = copyEntityToFormUtil.copyTodoListListToTodoListFormList(
+                todoListService.getTodoListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), true));
+        model.addAttribute("todoLists", todoListFormList);
 
         return "list/doneList";
     }
@@ -86,7 +88,7 @@ public class RedirectController {
      */
     @RequestMapping("admin/main")
     public String mainAdmin(Model model) {
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
         return "admin/main";
     }
 
@@ -98,8 +100,8 @@ public class RedirectController {
      */
     @RequestMapping("user/createUser")
     public String createUser(Model model) {
+        addParamUtil.addMastAttribute(model);
 
-        controllerProcedure.addMastAttribute(model);
         UserInformationForm userInformationForm = new UserInformationForm();
 
         model.addAttribute("userInformationForm", userInformationForm);
@@ -115,11 +117,13 @@ public class RedirectController {
      */
     @RequestMapping("admin/userList")
     public String userList(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
-        List<UserInformationForm> userInformationForms = userInformationService.selectUserAll();
+        addParamUtil.addMastAttribute(model);
 
-        model.addAttribute("userLists", userInformationForms);
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        List<UserInformationForm> userInformationFormList = copyEntityToFormUtil.copyUserInformationListToUserInformationFormList(
+                userInformationService.selectUserAll());
+
+        model.addAttribute("userLists", userInformationFormList);
         model.addAttribute("userId", userId);
 
         return "admin/userList";

@@ -1,17 +1,15 @@
 package com.todolist.service;
 
+import com.todolist.Util.ServiceUtil.CopyOrmToEntityUtil;
 import com.todolist.dao.UserInformationDao;
 import com.todolist.dto.UserInformationDto;
 import com.todolist.entity.UserInformation;
-import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +20,10 @@ import java.util.List;
  */
 @Service
 public class UserInformationService {
+
+    @Autowired
+    private CopyOrmToEntityUtil copyOrmToEntityUtil;
+
     @Autowired
     private UserInformationDao userInformationDao;
 
@@ -31,20 +33,12 @@ public class UserInformationService {
     /**
      * ユーザの全件抽出
      *
-     * @return List<UserInformationForm> の型で抽出、0件の場合は size=0 のListを返す
+     * @return List<UserInformation> の型で抽出、0件の場合は size=0 のListを返す
      */
-    public List<UserInformationForm> selectUserAll() {
-        List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
-        List<UserInformationForm> userInformationForms = new ArrayList<>();
+    public List<UserInformation> selectUserAll() {
+        List<UserInformationDto> userInformationDtoList = userInformationDao.selectUserAll();
 
-        //DtoクラスからFormクラスにデータを移し替える
-        for (UserInformationDto userInformationDto : userInformationDtos) {
-            UserInformationForm userInformationForm = new UserInformationForm();
-            BeanUtils.copyProperties(userInformationDto, userInformationForm);
-            userInformationForms.add(userInformationForm);
-        }
-
-        return userInformationForms;
+        return copyOrmToEntityUtil.copyUserInformationDtoListToUserInformationList(userInformationDtoList);
     }
 
     /**
@@ -116,9 +110,9 @@ public class UserInformationService {
      * @return true：入力されたユーザ名はDBにまだ登録されていない、false：すでに登録あり
      */
     public boolean isUniqueUserName(String userName) {
-        List<UserInformationDto> userInformationDtos = userInformationDao.selectUserAll();
+        List<UserInformationDto> userInformationDtoList = userInformationDao.selectUserAll();
 
-        for ( UserInformationDto userInformationDto : userInformationDtos) {
+        for ( UserInformationDto userInformationDto : userInformationDtoList) {
             if (userName.matches(userInformationDto.getUserName())) {
                 return false;
             }

@@ -1,20 +1,16 @@
 package com.todolist.webApp.User;
 
-import com.todolist.entity.UserInformation;
 import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.UserInformationService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
 
 /**
  * @author Ryota Tozuka
@@ -28,13 +24,13 @@ import javax.validation.Valid;
 public class ChangePasswordController {
 
     @Autowired
+    private AddParamUtil addParamUtil;
+
+    @Autowired
     private SecureUserDetailsService secureUserDetailsService;
 
     @Autowired
     private UserInformationService userInformationService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
 
     @ModelAttribute
     UserInformationForm setUpForm() {
@@ -56,7 +52,7 @@ public class ChangePasswordController {
             @RequestParam() String newPasswordFirst,
             @RequestParam() String newPasswordSecond,
             Model model) {
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
 
         //旧パスワードが違う場合はパスワード変更画面に戻る
         if (!secureUserDetailsService.checkPasswordIsValidated(oldPassword)) {

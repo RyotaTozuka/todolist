@@ -1,10 +1,10 @@
 package com.todolist.webApp.List;
 
-import com.todolist.entity.UserInformation;
+import com.todolist.Util.ControllerUtil.CopyEntityToFormUtil;
 import com.todolist.form.TodoListForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,20 +17,23 @@ import java.util.List;
 /**
  * @author Ryota Tozuka
  * @version 0.0.1
- *
+ * <p>
  * mainであるTodoリスト関連の画面のControllerクラス
  */
 @Controller
 public class DoneListController {
 
     @Autowired
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyEntityToFormUtil copyEntityToFormUtil;
+
+    @Autowired
     private TodoListService todoListService;
 
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
 
     @ModelAttribute
     TodoListForm setUpForm() {
@@ -45,12 +48,13 @@ public class DoneListController {
      */
     @RequestMapping("list/doneList/todoList")
     String mainProcessing(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        addParamUtil.addMastAttribute(model);
 
         //未完了のTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
-        model.addAttribute("todoLists", todoListForms);
+        List<TodoListForm> todoListFormList = copyEntityToFormUtil.copyTodoListListToTodoListFormList (
+                todoListService.getTodoListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), false));
+
+        model.addAttribute("todoLists", todoListFormList);
 
         return "list/todoList";
     }
@@ -89,10 +93,9 @@ public class DoneListController {
      */
     @RequestMapping(value = "list/doneList/deleteAll")
     String deleteAllCompleteList() {
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
 
         //ログインしているユーザに紐づく全完了リストを削除
-        todoListService.deleteListByUserIdAndFlag(userId, true);
+        todoListService.deleteListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), true);
 
         return "redirect:/list/doneList";
     }

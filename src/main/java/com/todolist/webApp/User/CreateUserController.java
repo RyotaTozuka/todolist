@@ -4,7 +4,7 @@ import com.todolist.entity.UserInformation;
 import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.UserInformationService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,16 +25,16 @@ import javax.validation.Valid;
  * @link com.todolist.webApp.Admin.AdminController
  */
 @Controller
-public class CreateUserController {
+public class    CreateUserController {
+
+    @Autowired
+    private AddParamUtil addParamUtil;
 
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
 
     @Autowired
     private UserInformationService userInformationService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
 
     @ModelAttribute
     UserInformationForm setUpForm() {
@@ -59,7 +59,7 @@ public class CreateUserController {
             BindingResult result,
             Model model) {
 
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
 
         if (result.hasErrors()) {
             return "user/createUser";
@@ -77,16 +77,7 @@ public class CreateUserController {
             return "user/createUser";
         }
 
-        UserInformation userInformation = new UserInformation();
-        userInformation.setUserName(form.getUserName());
-        userInformation.setUserPassword(passwordFirst);
-
-        //ユーザ権限が設定されていなければ、一般ユーザ権限を設定
-        if (form.getUserRole() != null) {
-            userInformation.setUserRole(form.getUserRole());
-        } else {
-            userInformation.setUserRole("ROLE_USER");
-        }
+        UserInformation userInformation = setUserInformation(form, passwordFirst);
 
         userInformationService.insertUserInformation(userInformation);
 
@@ -97,5 +88,27 @@ public class CreateUserController {
             return "redirect:/admin/main";
         }
         return "redirect:/login";
+    }
+
+    /**
+     * ユーザ情報詰替
+     *
+     * @param form　ユーザ情報フォーム
+     * @param password パスワード
+     * @return ユーザ情報
+     */
+    private UserInformation setUserInformation(UserInformationForm form, String password) {
+        UserInformation userInformation = new UserInformation();
+        userInformation.setUserName(form.getUserName());
+        userInformation.setUserPassword(password);
+
+        //ユーザ権限が設定されていなければ、一般ユーザ権限を設定
+        if (form.getUserRole() != null) {
+            userInformation.setUserRole(form.getUserRole());
+        } else {
+            userInformation.setUserRole("ROLE_USER");
+        }
+
+        return userInformation;
     }
 }

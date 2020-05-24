@@ -1,10 +1,10 @@
 package com.todolist.webApp.Login;
 
-import com.todolist.entity.UserInformation;
+import com.todolist.Util.ControllerUtil.CopyEntityToFormUtil;
 import com.todolist.form.TodoListForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +22,10 @@ import java.util.List;
 public class LoginController {
 
     @Autowired
-    private ControllerProcedure controllerProcedure;
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyEntityToFormUtil copyEntityToFormUtil;
 
     @Autowired
     private TodoListService todoListService;
@@ -50,11 +53,11 @@ public class LoginController {
      */
     @RequestMapping("login/todoList")
     String mainProcessing(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        addParamUtil.addMastAttribute(model);
 
         //未完了のTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), false);
+        List<TodoListForm> todoListForms = copyEntityToFormUtil.copyTodoListListToTodoListFormList(
+                todoListService.getTodoListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), false));
         model.addAttribute("todoLists", todoListForms);
 
         return "list/todoList";

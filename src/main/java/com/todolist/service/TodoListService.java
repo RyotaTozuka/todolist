@@ -1,9 +1,10 @@
 package com.todolist.service;
 
+import com.todolist.Util.ServiceUtil.CopyOrmToEntityUtil;
 import com.todolist.dao.TodoListDao;
 import com.todolist.dto.TodoListDto;
 import com.todolist.entity.TodoList;
-import com.todolist.form.TodoListForm;
+import com.todolist.security.SecureUserDetailsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,12 @@ public class TodoListService {
     private static final String NO_LIMIT = "9999-12-31";
 
     @Autowired
+    private CopyOrmToEntityUtil copyOrmToEntityUtil;
+
+    @Autowired
+    private SecureUserDetailsService secureUserDetailsService;
+
+    @Autowired
     private TodoListDao todoListDao;
 
     /**
@@ -34,17 +41,17 @@ public class TodoListService {
      * @param isComplete true：完了しているリスト、false：未完了のリスト
      * @return List<TodoListForm> の型で抽出、0件の場合は size=0 のListを返す
      */
-    public List<TodoListForm> getTodoListByUserIdAndFlag(Integer userId, boolean isComplete) {
-        List<TodoListDto> todoListDtos = todoListDao.selectTodoListByUserIdAndCompleteFlag(userId, isComplete);
-        List<TodoListForm> todoListForms = new ArrayList<>();
+    public List<TodoList> getTodoListByUserIdAndFlag(Integer userId, boolean isComplete) {
+        List<TodoListDto> todoListDtoList = todoListDao.selectTodoListByUserIdAndCompleteFlag(userId, isComplete);
+        List<TodoList> todoListList = new ArrayList<>();
 
-        //Dto⇒Formクラスにデータコピー
-        for (TodoListDto todoListDto : todoListDtos) {
-            TodoListForm todoListForm = new TodoListForm();
-            BeanUtils.copyProperties(todoListDto, todoListForm);
-            todoListForms.add(todoListForm);
+        //Dto⇒todoListエンティティにデータコピー
+        for (TodoListDto todoListDto : todoListDtoList) {
+            TodoList todoList = new TodoList();
+            BeanUtils.copyProperties(todoListDto, todoList);
+            todoListList.add(todoList);
         }
-        return todoListForms;
+        return todoListList;
     }
 
     /**
@@ -53,13 +60,9 @@ public class TodoListService {
      * @param listId リストId
      * @return todoListForm の型で抽出
      */
-    public TodoListForm getTodoListByListId(Integer listId) {
+    public TodoList getTodoListByListId(Integer listId) {
         TodoListDto todoListDto = todoListDao.selectTodoListByListId(listId);
-        TodoListForm todoListForm = new TodoListForm();
-
-        BeanUtils.copyProperties(todoListDto,todoListForm);
-
-        return todoListForm;
+        return copyOrmToEntityUtil.copyTodoListDtoToTodoList(todoListDto);
     }
 
     /**
@@ -69,7 +72,10 @@ public class TodoListService {
      * @return 挿入成功件数
      */
     public int insertTodoList(TodoList todoList) {
+        todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
+        todoList.setIsComplete(false);
         todoList.setDue(setDueWithFiniteRange(todoList.getDue()));
+
         return todoListDao.insertTodoList(todoList);
     }
 
@@ -91,15 +97,15 @@ public class TodoListService {
     /**
      * 入力された情報をもとにTodoListのレコード更新をする
      *
-     * @param listId リストId
-     * @param contents リストの内容
-     * @param due リストの実施期限
+    * @param todoListDiff todoListの更新データ
      * @return 更新完了件数（1ならば正常、0ならば異常）
      */
-    public int updateTodoList(Integer listId, String contents, String due) {
-        TodoList todoList = todoListDao.selectByListId(listId);
-        todoList.setContents(contents);
-        todoList.setDue(setDueWithFiniteRange(due));
+//    public int updateTodoList(Integer listId, String contents, String due) {
+    public int updateTodoList(TodoList todoListDiff) {
+
+        TodoList todoList = todoListDao.selectByListId(todoListDiff.getListId());
+        todoList.setContents(todoListDiff.getContents());
+        todoList.setDue(setDueWithFiniteRange(todoListDiff.getDue()));
 
         return todoListDao.update(todoList);
     }

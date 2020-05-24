@@ -1,10 +1,10 @@
 package com.todolist.webApp.List;
 
+import com.todolist.Util.ControllerUtil.CopyFormToEntityUtil;
 import com.todolist.entity.TodoList;
 import com.todolist.form.TodoListForm;
-import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +24,13 @@ import javax.validation.Valid;
 public class EditListController {
 
     @Autowired
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyFormToEntityUtil copyFormToEntityUtil;
+
+    @Autowired
     private TodoListService todoListService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
-
-    @Autowired
-    private SecureUserDetailsService secureUserDetailsService;
 
     @ModelAttribute
     TodoListForm setUpForm() {
@@ -50,24 +50,19 @@ public class EditListController {
                         BindingResult result,
                         @ModelAttribute("isCreate") boolean isCreate,
                         Model model) {
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
 
         if (result.hasErrors()) {
             return "list/editList";
         }
-        //todo:insert or updateの処理検討
+
+        TodoList todoList = copyFormToEntityUtil.copyTodoListFormToTodoList(form);
+
         if (isCreate) {
             //todoリストの新規作成
-            TodoList todoList = new TodoList();
-
-            todoList.setUserId(secureUserDetailsService.getUserInformation().getUserId());
-            todoList.setContents(form.getContents());
-            todoList.setDue(form.getDue());
-            todoList.setIsComplete(false);
-
             todoListService.insertTodoList(todoList);
         } else  {
-            todoListService.updateTodoList(form.getListId(), form.getContents(), form.getDue());
+            todoListService.updateTodoList(todoList);
         }
 
         return "redirect:/list/todoList";

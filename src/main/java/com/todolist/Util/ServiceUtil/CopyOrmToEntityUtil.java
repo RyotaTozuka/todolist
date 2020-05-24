@@ -1,9 +1,11 @@
-package com.todolist.Util.ControllerUtil;
+package com.todolist.Util.ServiceUtil;
 
+import com.todolist.dto.TodoListDto;
+import com.todolist.dto.UserInformationDto;
 import com.todolist.entity.TodoList;
+import com.todolist.entity.UserInformation;
 import com.todolist.form.TodoListForm;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,31 +15,50 @@ import java.util.List;
  * @author Ryota Tozuka
  * @version 0.0.1
  *
- * Form⇒Entity変換用utilクラス
+ * Orm⇒Entity変換用utilクラス
  */
 @Component
-public class CopyFormToEntityUtil {
+public class CopyOrmToEntityUtil {
 
-   /**
-     * todoListFormリスト⇒todoListリスト
+    /**
+     * ユーザ情報Dto⇒ユーザ情報リスト
      *
-     * @param todoListForms　todoListFormリスト
-     * @return todoListリスト
+     * @param userInformationDtoList ユーザ情報Dtoリスト
+     * @return ユーザ情報
      */
-    public List<TodoList> copyTodoListFormsToTodoLists(List<TodoListForm> todoListForms) {
-        List<TodoList> todoLists = new ArrayList<>();
+    public List<UserInformation> copyUserInformationDtoListToUserInformationList(List<UserInformationDto> userInformationDtoList) {
+        List<UserInformation> userInformationList = new ArrayList<>();
 
-        for (TodoListForm todoListForm : todoListForms) {
-            TodoList todoList = copyTodoListFormToTodoList(todoListForm);
-            todoLists.add(todoList);
+        for (UserInformationDto userInformationDto : userInformationDtoList) {
+            UserInformation userInformation = copyUserInformationDtoToUserInformation(userInformationDto);
+            userInformationList.add(userInformation);
         }
 
-        return todoLists;
+        return userInformationList;
     }
 
-    public TodoList copyTodoListFormToTodoList(TodoListForm todoListForm) {
+    /**
+     * ユーザ情報Dto⇒ユーザ情報
+     *
+     * @param userInformationDto ユーザ情報Dto
+     * @return ユーザ情報
+     */
+    public UserInformation copyUserInformationDtoToUserInformation(UserInformationDto userInformationDto) {
+        UserInformation userInformation = new UserInformation();
+        BeanUtils.copyProperties(userInformationDto, userInformation);
+        return userInformation;
+    }
+
+    /**
+     *
+     *
+     * @param todoListDto
+     * @return
+     */
+    public TodoList copyTodoListDtoToTodoList(TodoListDto todoListDto) {
         TodoList todoList = new TodoList();
-        BeanUtils.copyProperties(todoListForm,todoList);
+        BeanUtils.copyProperties(todoListDto,todoList);
         return todoList;
     }
+
 }

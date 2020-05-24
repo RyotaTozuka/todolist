@@ -1,10 +1,11 @@
 package com.todolist.webApp.List;
 
-import com.todolist.entity.UserInformation;
+import com.todolist.Util.ControllerUtil.CopyEntityToFormUtil;
+import com.todolist.entity.TodoList;
 import com.todolist.form.TodoListForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.TodoListService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +25,16 @@ import java.util.List;
 public class TodoListController {
 
     @Autowired
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyEntityToFormUtil copyEntityToFormUtil;
+
+    @Autowired
     private TodoListService todoListService;
 
     @Autowired
     private SecureUserDetailsService secureUserDetailsService;
-
-    @Autowired
-    private ControllerProcedure controllerProcedure;
 
     @ModelAttribute
     TodoListForm setUpForm() {
@@ -45,12 +49,12 @@ public class TodoListController {
      */
     @RequestMapping("list/todoList/doneList")
     String mainComplete(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        UserInformation userInformation = secureUserDetailsService.getUserInformation();
+        addParamUtil.addMastAttribute(model);
 
         //完了したTodoリストの取得
-        List<TodoListForm> todoListForms = todoListService.getTodoListByUserIdAndFlag(userInformation.getUserId(), true);
-        model.addAttribute("todoLists", todoListForms);
+        List<TodoListForm> todoListFormList = copyEntityToFormUtil.copyTodoListListToTodoListFormList(
+                todoListService.getTodoListByUserIdAndFlag(secureUserDetailsService.getUserInformation().getUserId(), true));
+        model.addAttribute("todoLists", todoListFormList);
 
         return "list/doneList";
     }
@@ -63,7 +67,7 @@ public class TodoListController {
      */
     @RequestMapping("list/todoList/create")
     String mainEditing(Model model) {
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
 
         TodoListForm todoListForm = new TodoListForm();
 
@@ -95,9 +99,10 @@ public class TodoListController {
      */
     @RequestMapping("list/todoList/edit")
     String editTodoList(@RequestParam() Integer listId, Model model) {
-        controllerProcedure.addMastAttribute(model);
+        addParamUtil.addMastAttribute(model);
 
-        TodoListForm todoListForm = todoListService.getTodoListByListId(listId);
+        TodoListForm todoListForm = copyEntityToFormUtil.copyTodoListToTodoListForm(
+                todoListService.getTodoListByListId(listId));
 
         //新規登録ではないので、isCreateにfalseを格納
         model.addAttribute("isCreate", false);

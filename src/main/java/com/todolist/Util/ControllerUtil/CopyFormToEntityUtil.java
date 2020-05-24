@@ -1,9 +1,8 @@
-package com.todolist.Util;
+package com.todolist.Util.ControllerUtil;
 
 import com.todolist.entity.TodoList;
 import com.todolist.form.TodoListForm;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,18 +20,18 @@ public class CopyFormToEntityUtil {
    /**
      * todoListFormリスト⇒todoListリスト
      *
-     * @param todoListForms　todoListFormリスト
+     * @param todoListFormList　todoListFormリスト
      * @return todoListリスト
      */
-    public List<TodoList> copyTodoListFormsToTodoLists(List<TodoListForm> todoListForms) {
-        List<TodoList> todoLists = new ArrayList<>();
+    public List<TodoList> copyTodoListFormListToTodoListList(List<TodoListForm> todoListFormList) {
+        List<TodoList> todoListList = new ArrayList<>();
 
-        for (TodoListForm todoListForm : todoListForms) {
+        for (TodoListForm todoListForm : todoListFormList) {
             TodoList todoList = copyTodoListFormToTodoList(todoListForm);
-            todoLists.add(todoList);
+            todoListList.add(todoList);
         }
 
-        return todoLists;
+        return todoListList;
     }
 
     public TodoList copyTodoListFormToTodoList(TodoListForm todoListForm) {

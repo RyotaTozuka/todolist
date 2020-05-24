@@ -1,9 +1,10 @@
 package com.todolist.webApp.Admin;
 
+import com.todolist.Util.ControllerUtil.CopyEntityToFormUtil;
 import com.todolist.form.UserInformationForm;
 import com.todolist.security.SecureUserDetailsService;
 import com.todolist.service.UserInformationService;
-import com.todolist.webAppCommon.ControllerProcedure;
+import com.todolist.Util.ControllerUtil.AddParamUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +22,10 @@ import java.util.List;
 public class AdminMainController {
 
     @Autowired
-    private ControllerProcedure controllerProcedure;
+    private AddParamUtil addParamUtil;
+
+    @Autowired
+    private CopyEntityToFormUtil copyEntityToFormUtil;
 
     @Autowired
     private UserInformationService userInformationService;
@@ -37,11 +41,13 @@ public class AdminMainController {
      */
     @RequestMapping("admin/main/userList")
     public String userList(Model model) {
-        controllerProcedure.addMastAttribute(model);
-        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
-        List<UserInformationForm> userInformationForms = userInformationService.selectUserAll();
+        addParamUtil.addMastAttribute(model);
 
-        model.addAttribute("userLists", userInformationForms);
+        Integer userId = secureUserDetailsService.getUserInformation().getUserId();
+        List<UserInformationForm> userInformationFormList = copyEntityToFormUtil.copyUserInformationListToUserInformationFormList(
+                userInformationService.selectUserAll());
+
+        model.addAttribute("userLists", userInformationFormList);
         model.addAttribute("userId", userId);
 
         return "admin/userList";
@@ -55,8 +61,8 @@ public class AdminMainController {
      */
     @RequestMapping("admin/main/createUser")
     public String createUser(Model model) {
+        addParamUtil.addMastAttribute(model);
 
-        controllerProcedure.addMastAttribute(model);
         UserInformationForm userInformationForm = new UserInformationForm();
 
         model.addAttribute("userInformationForm", userInformationForm);
