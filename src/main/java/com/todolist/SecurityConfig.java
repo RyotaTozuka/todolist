@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 //参照制限なし、login、ユーザ新規登録時の画面リソース
-                .antMatchers("/login","/header/header","/user/createUser","/user/insertUser")
+                .antMatchers("/login","/header/header","/user/createUser","/user/createUser/create")
                 .permitAll()
                 //admin配下は、権限："ROLE_ADMIN"のみが参照可能
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .failureUrl("/login?error")
-                .defaultSuccessUrl("/main/processing", true)
+                .defaultSuccessUrl("/login/todoList", true)
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and()

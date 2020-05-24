@@ -15,7 +15,7 @@
     </div>
 
     <div>
-        <form method="post" th:action="@{/main/editTodoList}" th:object="${todoListForm}">
+        <form method="post" th:action="@{/list/editList/edit}" th:object="${todoListForm}">
             <input type="hidden" name="isCreate" th:value="${isCreate}">
             <input type="hidden" th:field="*{listId}">
             <br><br><br>
@@ -31,12 +31,7 @@
                     <td class="data"><input type="text" style="width:500px" th:field="*{contents}" th:errorclass="fieldError"></td>
                     <td class="data"><input type="date" th:field="*{due}"></td>
                     <td>
-                        <div th:if="${isCreate}">
-                            <button class="todo-list" name="insert">新規登録</button>
-                        </div>
-                        <div th:unless="${isCreate}">
-                            <button class="todo-list" name="update">編集</button>
-                        </div>
+                        <button class="todo-list"><span th:text="${#bools.isTrue(isCreate) ? '新規登録' : '編集' }"/></button>
                     </td>
                 </tr>
                 </tbody>

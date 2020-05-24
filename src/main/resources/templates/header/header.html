@@ -4,17 +4,17 @@
     <div align="right">
         <div th:if="${userName != null}">
             <span class="mgr-20">
-                <a class="white" th:href="@{/main/processing}"><span th:text="${userName} + のTodoリスト" /></a>
+                <a class="white" th:href="@{/header/todoList}"><span th:text="${userName} + のTodoリスト" /></a>
             </span>
             <span class="mgr-20">
                 <a class="white" th:href="@{/logout}">ログアウト</a>
             </span>
             <br/>
             <span class="mgr-20" th:if="${userRole}">
-                <a class="white" th:href="@{/admin/main}">管理者画面</a>
+                <a class="white" th:href="@{/header/adminMain}">管理者画面</a>
             </span>
             <span class="mgr-20">
-                <a class="white" th:href="@{/user/changePassword}">パスワード変更</a>
+                <a class="white" th:href="@{/header/changePassword}">パスワード変更</a>
             </span>
         </div>
         <div class="mgr-20" th:unless="${userName != null}">
