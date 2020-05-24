@@ -1,4 +1,4 @@
-package com.todolist.webAppCommon;
+package com.todolist.Util.ControllerUtil;
 
 import com.todolist.entity.UserInformation;
 import com.todolist.security.SecureUserDetailsService;
@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
  * Controllerクラスでの共通処理
  */
 @Component
-public class ControllerProcedure {
+public class AddParamUtil {
     //権限情報の定義：thymeleafで扱いやすくするため、true/falseに変換
     private static final boolean ROLE_ADMIN = true;
     private static final boolean ROLE_USER = false;
